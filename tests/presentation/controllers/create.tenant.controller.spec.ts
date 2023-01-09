@@ -1,5 +1,5 @@
 import { CreateTenantController } from '@/presentation/controllers'
-import { ValidationSpy } from '../mocks'
+import { ValidationSpy, AddTenantSpy } from '../mocks'
 
 const mockRequest = (): CreateTenantController.Request => ({
     tenantId: 'valid_tenantId',
@@ -12,19 +12,22 @@ const mockRequest = (): CreateTenantController.Request => ({
     companyState: 'valid_companyState',
     companyNumber: 'valid_companyNumber',
     companyDistrict: 'valid_companyDistrict',
-    companyCity: 'valid_companyCity',
+    companyCity: 'valid_companyCity'
 })
 
 type SutTypes = {
     sut: CreateTenantController
     validationSpy: ValidationSpy
+    addTenantSpy: AddTenantSpy
 }
 
 const makeSut = (): SutTypes => {
     const validationSpy = new ValidationSpy()
-    const sut = new CreateTenantController(validationSpy)
+    const addTenantSpy = new AddTenantSpy()
+    const sut = new CreateTenantController(validationSpy, addTenantSpy)
     return {
         validationSpy,
+        addTenantSpy,
         sut
     }
 }
@@ -43,5 +46,12 @@ describe('CreateTenantController', () => {
         const request = mockRequest()
         const httpResponse = await sut.handle(request)
         expect(httpResponse.statusCode).toBe(400)
+    })
+
+    test('Should call AddTenant with correct values', async () => {
+        const { sut, addTenantSpy } = makeSut()
+        const request = mockRequest()
+        await sut.handle(request)
+        expect(addTenantSpy.input).toEqual(request)
     })
 })
