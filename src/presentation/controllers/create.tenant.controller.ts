@@ -1,7 +1,8 @@
 import { AddTenant } from '@/domain/usecases'
 import { Controller } from '@/presentation/protocols/controller'
-import { ok, badRequest } from '@/presentation/helpers'
+import { ok, badRequest, forbidden } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols'
+import { EmailInUseError } from '@/presentation/errors'
 
 export class CreateTenantController implements Controller {
     constructor(
@@ -13,13 +14,13 @@ export class CreateTenantController implements Controller {
         const validationError = this.validation.validate(data)
         if (validationError) return badRequest(validationError)
         const tenant = await this.addTenant.handle(data)
-        if (tenant) return ok(tenant)
+        if (!tenant) return forbidden(new EmailInUseError())
+        return ok(tenant)
     }
 }
 
 export namespace CreateTenantController {
     export interface Request {
-        tenantId: string
         companyName: string
         companyEmail: string
         companyTellphone: string
