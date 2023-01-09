@@ -54,4 +54,11 @@ describe('CreateTenantController', () => {
         await sut.handle(request)
         expect(addTenantSpy.input).toEqual(request)
     })
+
+    test('Should return company if AddTenant succeds', async () => {
+        const { sut } = makeSut()
+        const request = mockRequest()
+        const company = await sut.handle(request)
+        expect(company.statusCode).toEqual(200)
+    })
 })
