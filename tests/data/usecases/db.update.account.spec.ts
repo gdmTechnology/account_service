@@ -10,7 +10,6 @@ const mockeRequest = (): UpdateAccount.Request => ({
     identification: 'any_id',
     name: 'name',
     lastName: 'lastName',
-    birthDate: new Date(),
     tellphone: 'tellphone',
     cellphone: 'cellphone',
     streetAddress: 'streetAddress',
