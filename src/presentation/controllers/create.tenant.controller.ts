@@ -1,7 +1,7 @@
 import { AddTenant } from '@/domain/usecases'
 import { Controller } from '@/presentation/protocols/controller'
-import { badRequest } from '../helpers'
-import { Validation } from '../protocols/validation'
+import { ok, badRequest } from '@/presentation/helpers'
+import { Validation } from '@/presentation/protocols'
 
 export class CreateTenantController implements Controller {
     constructor(
@@ -12,7 +12,8 @@ export class CreateTenantController implements Controller {
     async handle(data: CreateTenantController.Request): Promise<any> {
         const validationError = this.validation.validate(data)
         if (validationError) return badRequest(validationError)
-        await this.addTenant.handle(data)
+        const tenant = await this.addTenant.handle(data)
+        if (tenant) return ok(tenant)
     }
 }
 
