@@ -1,8 +1,9 @@
 import { CreateTenantController } from '@/presentation/controllers'
+import { EmailInUseError } from '@/presentation/errors'
+import { forbidden } from '@/presentation/helpers'
 import { ValidationSpy, AddTenantSpy } from '../mocks'
 
 const mockRequest = (): CreateTenantController.Request => ({
-    tenantId: 'valid_tenantId',
     companyName: 'valid_companyName',
     companyEmail: 'valid_companyEmail',
     companyTellphone: 'valid_companyTellphone',
@@ -55,10 +56,19 @@ describe('CreateTenantController', () => {
         expect(addTenantSpy.input).toEqual(request)
     })
 
-    test('Should return company if AddTenant succeds', async () => {
+    test('Should return 200 if AddTenant succeds', async () => {
         const { sut } = makeSut()
         const request = mockRequest()
         const company = await sut.handle(request)
         expect(company.statusCode).toEqual(200)
+    })
+
+    test('Should return 403 if AddTenant fail', async () => {
+        const { sut, addTenantSpy } = makeSut()
+        jest.spyOn(addTenantSpy, 'handle').mockReturnValueOnce(new Promise((resolve, reject) => resolve(null)))
+        const request = mockRequest()
+        const company = await sut.handle(request)
+        expect(company.statusCode).toEqual(403)
+        expect(company).toEqual(forbidden(new EmailInUseError()))
     })
 })
