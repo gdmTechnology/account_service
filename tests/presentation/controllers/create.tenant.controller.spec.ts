@@ -3,6 +3,10 @@ import { EmailInUseError } from '@/presentation/errors'
 import { forbidden } from '@/presentation/helpers'
 import { ValidationSpy, AddTenantSpy } from '../mocks'
 
+const throwError = (): never => {
+    throw new Error()
+}
+
 const mockRequest = (): CreateTenantController.Request => ({
     companyName: 'valid_companyName',
     companyEmail: 'valid_companyEmail',
@@ -70,5 +74,13 @@ describe('CreateTenantController', () => {
         const company = await sut.handle(request)
         expect(company.statusCode).toEqual(403)
         expect(company).toEqual(forbidden(new EmailInUseError()))
+    })
+
+    test('Should return 500 if AddTenant throws', async () => {
+        const { sut, addTenantSpy } = makeSut()
+        jest.spyOn(addTenantSpy, 'handle').mockImplementationOnce(throwError)
+        const request = mockRequest()
+        const response = await sut.handle(request)
+        expect(response.statusCode).toEqual(500)
     })
 })
