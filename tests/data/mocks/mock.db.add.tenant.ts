@@ -11,7 +11,23 @@ export class CheckTenantByEmailRepositorySpy implements CheckTenantByEmailReposi
 
 export class AddTenantRepositorySpy implements AddTenantRepository {
     params: any
-    result: any = true
+    result: any = {
+        tenantId: 'any_id',
+        companyAddress: 'companyAddress',
+        companyCellphone: 'companyCellphone',
+        companyCity: 'companyCity',
+        companyCnpj: 'companyCnpj',
+        companyDistrict: 'companyDistrict',
+        companyEmail: 'companyEmail',
+        companyName: 'companyName',
+        companyNumber: 'companyNumber',
+        companyState: 'companyState',
+        companyTellphone: 'companyTellphone',
+        companyIsActived: true,
+        createdAt: 'createdAt',
+        updateAt: 'updateAt'
+    }
+
     async save(data: AddTenantRepository.Params): Promise<AddTenantRepository.Result> {
         this.params = data
         return this.result

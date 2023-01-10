@@ -70,4 +70,13 @@ describe('DbAddTenant', () => {
         await sut.handle(request)
         expect(addTenantRepositorySpy.params).toEqual({ ...request, tenantId: 'any_id' })
     })
+
+    test('Should return valid account if AddTenantRepositorySpy succeds', async () => {
+        const { sut, checkTenantByEmailRepositorySpy } = makeSut()
+        jest.spyOn(checkTenantByEmailRepositorySpy, 'check').mockReturnValue(null)
+        const request = mockRequest()
+        const company = await sut.handle(request)
+        expect(company).toHaveProperty('tenantId')
+        expect(company).toBeDefined()
+    })
 })
