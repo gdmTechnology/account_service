@@ -36,4 +36,11 @@ describe('DbAddTenant', () => {
         await sut.handle(request)
         expect(checkTenantByEmailRepositorySpy.params).toEqual(request.companyEmail)
     })
+
+    test('Should return false if CheckTenantByEmailRepository return a company', async () => {
+        const { sut } = makeSut()
+        const request = mockRequest()
+        const response = await sut.handle(request)
+        expect(response).toBeFalsy()
+    })
 })
