@@ -17,6 +17,7 @@ export namespace AddTenant {
     }
     export type Result = {
         tenantId: string
+        companyIdentification: string
         companyName: string
         companyEmail: string
         companyTellphone?: string
@@ -27,7 +28,8 @@ export namespace AddTenant {
         companyNumber?: string
         companyDistrict?: string
         companyCity?: string
-        createdAt: string
-        updateAt: string
+        companyIsActived: boolean
+        createdAt: Date
+        updateAt: Date
     }
 }
