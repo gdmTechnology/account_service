@@ -63,7 +63,7 @@ describe('DbAddTenant', () => {
         await expect(promise).rejects.toThrow()
     })
 
-    test('Should call AddTenantRepositorySpy with correct values', async () => {
+    test('Should call AddTenantRepository with correct values', async () => {
         const { sut, addTenantRepositorySpy, checkTenantByEmailRepositorySpy } = makeSut()
         jest.spyOn(checkTenantByEmailRepositorySpy, 'check').mockReturnValue(null)
         const request = mockRequest()
@@ -71,12 +71,21 @@ describe('DbAddTenant', () => {
         expect(addTenantRepositorySpy.params).toEqual({ ...request, tenantId: 'any_id' })
     })
 
-    test('Should return valid account if AddTenantRepositorySpy succeds', async () => {
+    test('Should return valid account if AddTenantRepository succeds', async () => {
         const { sut, checkTenantByEmailRepositorySpy } = makeSut()
         jest.spyOn(checkTenantByEmailRepositorySpy, 'check').mockReturnValue(null)
         const request = mockRequest()
         const company = await sut.handle(request)
         expect(company).toHaveProperty('tenantId')
         expect(company).toBeDefined()
+    })
+
+    test('Should throw if AddTenantRepository throws', async () => {
+        const { sut, checkTenantByEmailRepositorySpy, addTenantRepositorySpy } = makeSut()
+        jest.spyOn(checkTenantByEmailRepositorySpy, 'check').mockReturnValue(null)
+        jest.spyOn(addTenantRepositorySpy, 'save').mockImplementationOnce(throwError)
+        const request = mockRequest()
+        const promise = sut.handle(request)
+        await expect(promise).rejects.toThrow()
     })
 })
