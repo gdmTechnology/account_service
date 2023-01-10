@@ -7,6 +7,7 @@ export class DbAddTenant implements AddTenant {
     ) { }
 
     async handle(data: AddTenant.Request): Promise<any> {
-        await this.checkTenantByEmailRepository.check(data.companyEmail)
+        const company = await this.checkTenantByEmailRepository.check(data.companyEmail)
+        if (company) return !company
     }
 }
