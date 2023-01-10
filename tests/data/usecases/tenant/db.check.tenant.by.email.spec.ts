@@ -1,7 +1,11 @@
 
 import { DbAddTenant } from '@/data/usecases'
 import { AddTenant } from '@/domain/usecases'
-import { CheckTenantByEmailRepositorySpy } from '@/tests/data/mocks'
+import { CheckTenantByEmailRepositorySpy, CreateUuidSpy } from '@/tests/data/mocks'
+
+const throwError = (): never => {
+    throw new Error()
+}
 
 const mockRequest = (): AddTenant.Request => ({
     companyName: 'companyName',
@@ -18,13 +22,16 @@ const mockRequest = (): AddTenant.Request => ({
 
 type SutTypes = {
     checkTenantByEmailRepositorySpy: CheckTenantByEmailRepositorySpy
+    createUuidSpy: CreateUuidSpy
     sut: DbAddTenant
 }
 const makeSut = (): SutTypes => {
     const checkTenantByEmailRepositorySpy = new CheckTenantByEmailRepositorySpy()
-    const sut = new DbAddTenant(checkTenantByEmailRepositorySpy)
+    const createUuidSpy = new CreateUuidSpy()
+    const sut = new DbAddTenant(checkTenantByEmailRepositorySpy, createUuidSpy)
     return {
         checkTenantByEmailRepositorySpy,
+        createUuidSpy,
         sut
     }
 }
@@ -42,5 +49,14 @@ describe('DbAddTenant', () => {
         const request = mockRequest()
         const response = await sut.handle(request)
         expect(response).toBeFalsy()
+    })
+
+    test('Should throw if CreateUuid throws', async () => {
+        const { sut, checkTenantByEmailRepositorySpy, createUuidSpy } = makeSut()
+        jest.spyOn(checkTenantByEmailRepositorySpy, 'check').mockReturnValue(null)
+        jest.spyOn(createUuidSpy, 'create').mockImplementationOnce(throwError)
+        const request = mockRequest()
+        const promise = sut.handle(request)
+        await expect(promise).rejects.toThrow()
     })
 })
