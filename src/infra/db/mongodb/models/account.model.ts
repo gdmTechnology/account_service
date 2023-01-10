@@ -35,6 +35,6 @@ const AccountSchema = new Schema({
         type: Boolean,
         default: true
     }
-})
+}, { timestamps: true })
 
 export const AccountModel = mongoose.model('AccountModel', AccountSchema)
