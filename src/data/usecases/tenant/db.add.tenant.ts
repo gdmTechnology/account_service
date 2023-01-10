@@ -9,13 +9,11 @@ export class DbAddTenant implements AddTenant {
         private readonly addTenantRepository: AddTenantRepository
     ) { }
 
-    async handle(data: AddTenant.Request): Promise<any> {
-        const company = await this.checkTenantByEmailRepository.check(data.companyEmail)
-        if (!company) {
-            const tenantId = this.createUuid.create()
-            const company = await this.addTenantRepository.save({ ...data, tenantId })
-            return company
-        }
-        return null
+    async handle(data: AddTenant.Request): Promise<AddTenant.Result> {
+        const hasCompany = await this.checkTenantByEmailRepository.check(data.companyEmail)
+        if (hasCompany) return null
+        const tenantId = this.createUuid.create()
+        const company = await this.addTenantRepository.save({ ...data, tenantId })
+        return company
     }
 }
