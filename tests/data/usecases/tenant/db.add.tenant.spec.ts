@@ -54,6 +54,14 @@ describe('DbAddTenant', () => {
         expect(response).toBeFalsy()
     })
 
+    test('Should throw if CheckTenantByEmailRepository throws', async () => {
+        const { sut, checkTenantByEmailRepositorySpy } = makeSut()
+        jest.spyOn(checkTenantByEmailRepositorySpy, 'check').mockImplementationOnce(throwError)
+        const request = mockRequest()
+        const promise = sut.handle(request)
+        await expect(promise).rejects.toThrow()
+    })
+
     test('Should throw if CreateUuid throws', async () => {
         const { sut, checkTenantByEmailRepositorySpy, createUuidSpy } = makeSut()
         jest.spyOn(checkTenantByEmailRepositorySpy, 'check').mockReturnValue(null)
