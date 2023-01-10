@@ -11,8 +11,11 @@ export class DbAddTenant implements AddTenant {
 
     async handle(data: AddTenant.Request): Promise<any> {
         const company = await this.checkTenantByEmailRepository.check(data.companyEmail)
-        if (company) return !company
-        const tenantId = this.createUuid.create()
-        await this.addTenantRepository.save({ ...data, tenantId })
+        if (!company) {
+            const tenantId = this.createUuid.create()
+            const company = await this.addTenantRepository.save({ ...data, tenantId })
+            return company
+        }
+        return null
     }
 }

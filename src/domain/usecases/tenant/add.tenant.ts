@@ -17,7 +17,6 @@ export namespace AddTenant {
     }
     export type Result = {
         tenantId: string
-        companyIdentification: string
         companyName: string
         companyEmail: string
         companyTellphone?: string
