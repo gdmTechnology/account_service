@@ -1,7 +1,7 @@
 
 import { DbAddTenant } from '@/data/usecases'
 import { AddTenant } from '@/domain/usecases'
-import { CheckTenantByEmailRepositorySpy, CreateUuidSpy } from '@/tests/data/mocks'
+import { CheckTenantByEmailRepositorySpy, CreateUuidSpy, AddTenantRepositorySpy } from '@/tests/data/mocks'
 
 const throwError = (): never => {
     throw new Error()
@@ -23,15 +23,18 @@ const mockRequest = (): AddTenant.Request => ({
 type SutTypes = {
     checkTenantByEmailRepositorySpy: CheckTenantByEmailRepositorySpy
     createUuidSpy: CreateUuidSpy
+    addTenantRepositorySpy: AddTenantRepositorySpy
     sut: DbAddTenant
 }
 const makeSut = (): SutTypes => {
     const checkTenantByEmailRepositorySpy = new CheckTenantByEmailRepositorySpy()
     const createUuidSpy = new CreateUuidSpy()
-    const sut = new DbAddTenant(checkTenantByEmailRepositorySpy, createUuidSpy)
+    const addTenantRepositorySpy = new AddTenantRepositorySpy()
+    const sut = new DbAddTenant(checkTenantByEmailRepositorySpy, createUuidSpy, addTenantRepositorySpy)
     return {
         checkTenantByEmailRepositorySpy,
         createUuidSpy,
+        addTenantRepositorySpy,
         sut
     }
 }
@@ -58,5 +61,13 @@ describe('DbAddTenant', () => {
         const request = mockRequest()
         const promise = sut.handle(request)
         await expect(promise).rejects.toThrow()
+    })
+
+    test('Should call AddTenantRepositorySpy with correct values', async () => {
+        const { sut, addTenantRepositorySpy, checkTenantByEmailRepositorySpy } = makeSut()
+        jest.spyOn(checkTenantByEmailRepositorySpy, 'check').mockReturnValue(null)
+        const request = mockRequest()
+        await sut.handle(request)
+        expect(addTenantRepositorySpy.params).toEqual({ ...request, tenantId: 'any_id' })
     })
 })
