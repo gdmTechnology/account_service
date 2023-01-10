@@ -1,7 +1,7 @@
 import { AddTenant } from '@/domain/usecases'
 import { Controller } from '@/presentation/protocols/controller'
 import { ok, badRequest, forbidden, serverError } from '@/presentation/helpers'
-import { Validation } from '@/presentation/protocols'
+import { HttpResponse, Validation } from '@/presentation/protocols'
 import { EmailInUseError } from '@/presentation/errors'
 
 export class CreateTenantController implements Controller {
@@ -10,7 +10,7 @@ export class CreateTenantController implements Controller {
         private readonly addTenant: AddTenant
     ) { }
 
-    async handle(data: CreateTenantController.Request): Promise<any> {
+    async handle(data: CreateTenantController.Request): Promise<HttpResponse> {
         try {
             const validationError = this.validation.validate(data)
             if (validationError) return badRequest(validationError)
