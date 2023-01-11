@@ -6,9 +6,6 @@ const randomWrongCnpj = '46.089.005/0001-20'
 const cnpjWithMoreThan14 = '46.089.005/00001-20'
 const cnpjWithLessThan14 = '46.09.005//0001-20'
 
-const throwError = (): never => {
-  throw new Error()
-}
 interface SutTypes {
   sut: CnpjValidation
 }
