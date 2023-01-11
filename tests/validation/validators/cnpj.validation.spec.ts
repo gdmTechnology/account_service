@@ -21,18 +21,19 @@ const makeSut = (): SutTypes => {
 describe('CnpjValidation Validation', () => {
   test('Should return a InvalidParamError if validation fails', () => {
     const { sut } = makeSut()
-    const error = sut.validate({ companyEmail: invalidCnpj })
+    const error = sut.validate(invalidCnpj)
     expect(error).toEqual(new InvalidParamError('companyCnpj'))
   })
 
-  // test('Should call EmailValidator with correct email', () => {
+  // test('Should call CnpjValidation with correct cnpj', () => {
   //   const { sut, emailValidatorSpy } = makeSut()
   //   sut.validate({ email })
   //   expect(emailValidatorSpy.param).toBe(email)
   // })
+
   // test('Should not return if validation succeeds', () => {
   //   const { sut } = makeSut()
-  //   const error = sut.validate({ email })
+  //   const error = sut.validate(validCnpj)
   //   expect(error).toBeFalsy()
   // })
 
