@@ -23,8 +23,7 @@ export class CnpjValidation implements Validation {
       const digitsOnly = /^\d{14}$/.test(input[this.fieldName])
       // Teste Regex para verificar se é uma string formatada válida
       const validFormat = /^\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}$/.test(input[this.fieldName])
-
-      if (!digitsOnly || !validFormat) return new InvalidParamError(this.fieldName)
+      if (digitsOnly || validFormat) true
     }
 
     // Guarda um array com todos os dígitos do valor
@@ -33,11 +32,11 @@ export class CnpjValidation implements Validation {
 
     // Valida a quantidade de dígitos
     if (numbers.length !== 14) return new InvalidParamError(this.fieldName)
-
+    console.log('3: ')
     // Elimina inválidos com todos os dígitos iguais
     const items = [...new Set(numbers)]
     if (items.length === 1) return new InvalidParamError(this.fieldName)
-
+    console.log('4: ')
     // Cálculo validador
     const calc = (x) => {
       const slice = numbers.slice(0, x)
