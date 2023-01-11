@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 
-const CompanySchema = new Schema({
+const TenantSchema = new Schema({
     tenantId: {
         type: String,
         index: true,
@@ -33,4 +33,4 @@ const CompanySchema = new Schema({
     }
 }, { timestamps: true })
 
-export const CompanyModel = mongoose.model('CompanyModel', CompanySchema)
+export const TenantModel = mongoose.model('TenantModel', TenantSchema)

@@ -29,6 +29,6 @@ export namespace AddTenant {
         companyCity?: string
         companyIsActived: boolean
         createdAt: Date
-        updateAt: Date
+        updatedAt: Date
     }
 }
