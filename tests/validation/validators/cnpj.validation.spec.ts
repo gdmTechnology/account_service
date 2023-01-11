@@ -3,6 +3,7 @@ import { InvalidParamError } from '@/presentation/errors'
 
 const validCnpj = '46.089.055/0001-10'
 const randomWrongCnpj = '46.089.005/0001-20'
+const cnpjWithMoreThan14 = '46.089.005/00001-20'
 
 const throwError = (): never => {
   throw new Error()
@@ -25,11 +26,12 @@ describe('CnpjValidation Validation', () => {
     expect(error).toEqual(new InvalidParamError('companyCnpj'))
   })
 
-  // test('Should call CnpjValidation with correct cnpj', () => {
-  //   const { sut, emailValidatorSpy } = makeSut()
-  //   sut.validate({ email })
-  //   expect(emailValidatorSpy.param).toBe(email)
-  // })
+  test('Should return a InvalidParamError when cnpj has more than 14 characteres', () => {
+    const { sut } = makeSut()
+    const error = sut.validate({ companyCnpj: cnpjWithMoreThan14 })
+    expect(error).toEqual(new InvalidParamError('companyCnpj'))
+  })
+
   test('Should not return if validation succeeds', () => {
     const { sut } = makeSut()
     const error = sut.validate({ companyCnpj: validCnpj })
