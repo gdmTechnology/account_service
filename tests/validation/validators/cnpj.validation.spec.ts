@@ -44,10 +44,4 @@ describe('CnpjValidation Validation', () => {
     const error = sut.validate({ companyCnpj: validCnpj })
     expect(error).toBeFalsy()
   })
-
-  // test('Should throw if EmailValidator throws', () => {
-  //   const { sut, emailValidatorSpy } = makeSut()
-  //   jest.spyOn(emailValidatorSpy, 'isValid').mockImplementationOnce(throwError)
-  //   expect(sut.validate).toThrow()
-  // })
 })
