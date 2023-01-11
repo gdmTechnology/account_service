@@ -46,6 +46,13 @@ describe('TenantMongoRepository', () => {
                 const company = await sut.check(request.companyEmail)
                 expect(company).toBeDefined()
             })
+
+            test('Should return null if email is invalid', async () => {
+                const sut = makeSut()
+                const request = addTenantParams()
+                const company = await sut.check(request.companyEmail)
+                expect(company).toBeNull()
+            })
         })
     })
 })
