@@ -1,7 +1,7 @@
 import { DbLoadAccountByToken } from '@/data/usecases'
 import { LoadAccountByToken } from '@/domain/usecases'
 import { LoadAccountByTokenRepositorySpy } from '@/tests/data/mocks'
-import { DecrypterSpy } from '../mocks'
+import { DecrypterSpy } from '../../mocks'
 
 type SutTypes = {
     decrypterSpy: DecrypterSpy
