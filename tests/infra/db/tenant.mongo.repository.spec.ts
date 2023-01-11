@@ -19,7 +19,7 @@ const addTenantParams = (): AddTenantRepository.Params => ({
     companyState: 'companyState',
     companyNumber: 'companyNumber',
     companyDistrict: 'companyDistrict',
-    companyCity: 'companyCity',
+    companyCity: 'companyCity'
 })
 
 describe('TenantMongoRepository', () => {
@@ -28,12 +28,24 @@ describe('TenantMongoRepository', () => {
     afterAll(async () => await MongoTestDbHelper.disconnect())
 
     describe('AddTenantRepository()', () => {
-        test('Should return company if email is valid', async () => {
-            const sut = makeSut()
-            const request = addTenantParams()
-            const company = await sut.save(request)
-            expect(company).toBeDefined()
-            expect(company).toHaveProperty('createdAt')
+        describe('save()', () => {
+            test('Should return a company on success', async () => {
+                const sut = makeSut()
+                const request = addTenantParams()
+                const company = await sut.save(request)
+                expect(company).toBeDefined()
+                expect(company).toHaveProperty('createdAt')
+            })
+        })
+
+        describe('check()', () => {
+            test('Should return company if email is valid', async () => {
+                const sut = makeSut()
+                const request = addTenantParams()
+                await sut.save(request)
+                const company = await sut.check(request.companyEmail)
+                expect(company).toBeDefined()
+            })
         })
     })
 })
