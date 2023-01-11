@@ -2,7 +2,7 @@ import { CnpjValidation } from '@/validation/validators'
 import { InvalidParamError } from '@/presentation/errors'
 
 const validCnpj = '46.089.055/0001-10'
-const invalidCnpj = '46.089.005/0001-20'
+const randomWrongCnpj = '46.089.005/0001-20'
 
 const throwError = (): never => {
   throw new Error()
@@ -21,7 +21,7 @@ const makeSut = (): SutTypes => {
 describe('CnpjValidation Validation', () => {
   test('Should return a InvalidParamError if validation fails', () => {
     const { sut } = makeSut()
-    const error = sut.validate(invalidCnpj)
+    const error = sut.validate({ companyCnpj: randomWrongCnpj })
     expect(error).toEqual(new InvalidParamError('companyCnpj'))
   })
 
@@ -30,12 +30,11 @@ describe('CnpjValidation Validation', () => {
   //   sut.validate({ email })
   //   expect(emailValidatorSpy.param).toBe(email)
   // })
-
-  // test('Should not return if validation succeeds', () => {
-  //   const { sut } = makeSut()
-  //   const error = sut.validate(validCnpj)
-  //   expect(error).toBeFalsy()
-  // })
+  test('Should not return if validation succeeds', () => {
+    const { sut } = makeSut()
+    const error = sut.validate({ companyCnpj: validCnpj })
+    expect(error).toBeFalsy()
+  })
 
   // test('Should throw if EmailValidator throws', () => {
   //   const { sut, emailValidatorSpy } = makeSut()
