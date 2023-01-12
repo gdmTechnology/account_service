@@ -8,7 +8,7 @@ export const makeAddTenantValidation = (): ValidationComposite => {
         validations.push(new RequiredFieldValidation(field))
     }
     validations.push(new EmailValidation('companyEmail', new EmailValidatorAdapter()))
-    validations.push(new CnpjValidation('cnpjCompany'))
+    validations.push(new CnpjValidation('companyCnpj'))
 
     return new ValidationComposite(validations)
 }
