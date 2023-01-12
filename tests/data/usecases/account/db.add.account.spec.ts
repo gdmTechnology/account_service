@@ -1,6 +1,6 @@
 import { AddAccount } from '@/domain/usecases'
 import { DbAddAccount } from '@/data/usecases'
-import { CheckAccountByEmailRepositorySpy, AddAccountRepositorySpy, HasherSpy, CreateUuidSpy } from '@/tests/data/mocks'
+import { CheckAccountByEmailRepositorySpy, AddAccountRepositorySpy, HasherSpy, CreateUuidSpy, LoadTenantRepositorySpy } from '@/tests/data/mocks'
 
 const throwError = (): never => {
     throw new Error()
@@ -8,6 +8,7 @@ const throwError = (): never => {
 
 const mockeRequest = (): AddAccount.Request => ({
     email: 'email',
+    tenant: 'tenant',
     password: 'password',
     identification: 'any_id',
     name: 'name',
@@ -28,6 +29,7 @@ type SutTypes = {
     hasherSpy: HasherSpy
     addAccountRepositorySpy: AddAccountRepositorySpy
     checkAccountByEmailRepositorySpy: CheckAccountByEmailRepositorySpy
+    loadTenantRepositorySpy: LoadTenantRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
@@ -35,12 +37,20 @@ const makeSut = (): SutTypes => {
     const hasherSpy = new HasherSpy()
     const checkAccountByEmailRepositorySpy = new CheckAccountByEmailRepositorySpy()
     const addAccountRepositorySpy = new AddAccountRepositorySpy()
-    const sut = new DbAddAccount(createUuidSpy, hasherSpy, checkAccountByEmailRepositorySpy, addAccountRepositorySpy)
+    const loadTenantRepositorySpy = new LoadTenantRepositorySpy()
+    const sut = new DbAddAccount(
+        createUuidSpy,
+        hasherSpy,
+        checkAccountByEmailRepositorySpy,
+        addAccountRepositorySpy,
+        loadTenantRepositorySpy
+    )
     return {
         createUuidSpy,
         hasherSpy,
         checkAccountByEmailRepositorySpy,
         addAccountRepositorySpy,
+        loadTenantRepositorySpy,
         sut
     }
 }
@@ -86,5 +96,11 @@ describe('DbAddAccount Usecase', () => {
         jest.spyOn(createUuidSpy, 'create').mockImplementationOnce(throwError)
         const promise = sut.handle(mockeRequest())
         await expect(promise).rejects.toThrow()
+    })
+
+    test('Should call CheckAccountByEmailRepository with correct values', async () => {
+        const { sut, loadTenantRepositorySpy } = makeSut()
+        await sut.handle(mockeRequest())
+        expect(loadTenantRepositorySpy.params).toBe('tenant')
     })
 })

@@ -1,4 +1,4 @@
-import { AddAccountRepository, CheckAccountByEmailRepository } from '@/data/protocols/db'
+import { AddAccountRepository, CheckAccountByEmailRepository, LoadTenantRepository } from '@/data/protocols/db'
 import { Hasher, CreateUuid } from '@/data/protocols/cryptography'
 
 export class CheckAccountByEmailRepositorySpy implements CheckAccountByEmailRepository {
@@ -32,5 +32,14 @@ export class CreateUuidSpy implements CreateUuid {
 
     create(): string {
         return this.id
+    }
+}
+
+export class LoadTenantRepositorySpy implements LoadTenantRepository {
+    params: any
+    result: any = true
+    async load(params: any): Promise<LoadTenantRepository.Result> {
+        this.params = params
+        return this.result
     }
 }
