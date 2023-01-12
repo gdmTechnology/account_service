@@ -110,4 +110,11 @@ describe('DbAddAccount Usecase', () => {
         expect(loadTenantRepositorySpy.result).toBeDefined()
         expect(loadTenantRepositorySpy.result).toHaveProperty('companyCnpj')
     })
+
+    test('Should return false if LoadTenantRepository return null', async () => {
+        const { sut, loadTenantRepositorySpy } = makeSut()
+        jest.spyOn(loadTenantRepositorySpy, 'load').mockImplementationOnce(null)
+        const response = await sut.handle(mockeRequest())
+        expect(response).toBeFalsy()
+    })
 })
