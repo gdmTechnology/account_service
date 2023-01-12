@@ -1,6 +1,6 @@
 import { Controller } from '@/presentation/protocols/controller'
 import { badRequest, serverError, unauthorized, ok } from '@/presentation/helpers'
-import { Validation } from '../protocols/validation'
+import { Validation } from '@/presentation/protocols/validation'
 import { Authentication } from '@/domain/usecases'
 export class AuthenticationController implements Controller {
     constructor(

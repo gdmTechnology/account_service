@@ -1,6 +1,6 @@
 import { Controller } from '@/presentation/protocols/controller'
-import { Validation } from '../protocols/validation'
-import { badRequest, serverError, ok } from '../helpers/http.helper'
+import { Validation } from '@/presentation/protocols/validation'
+import { badRequest, serverError, ok } from '@/presentation/helpers'
 import { UserNotFoundError } from '@/presentation/errors'
 import { UpdateAccount } from '@/domain/usecases'
 
