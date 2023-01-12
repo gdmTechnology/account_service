@@ -98,7 +98,7 @@ describe('DbAddAccount Usecase', () => {
         await expect(promise).rejects.toThrow()
     })
 
-    test('Should call CheckAccountByEmailRepository with correct values', async () => {
+    test('Should call LoadTenantRepository with correct values', async () => {
         const { sut, loadTenantRepositorySpy } = makeSut()
         await sut.handle(mockeRequest())
         expect(loadTenantRepositorySpy.params).toBe('tenant')
