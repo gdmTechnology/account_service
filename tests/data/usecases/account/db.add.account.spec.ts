@@ -103,4 +103,11 @@ describe('DbAddAccount Usecase', () => {
         await sut.handle(mockeRequest())
         expect(loadTenantRepositorySpy.params).toBe('tenant')
     })
+
+    test('Should return a valid company if LoadTenantRepository succeds', async () => {
+        const { sut, loadTenantRepositorySpy } = makeSut()
+        await sut.handle(mockeRequest())
+        expect(loadTenantRepositorySpy.result).toBeDefined()
+        expect(loadTenantRepositorySpy.result).toHaveProperty('companyCnpj')
+    })
 })

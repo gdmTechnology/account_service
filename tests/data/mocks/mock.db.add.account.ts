@@ -37,7 +37,23 @@ export class CreateUuidSpy implements CreateUuid {
 
 export class LoadTenantRepositorySpy implements LoadTenantRepository {
     params: any
-    result: any = true
+    result: any = {
+        tenantId: 'any_id',
+        companyAddress: 'companyAddress',
+        companyCellphone: 'companyCellphone',
+        companyCity: 'companyCity',
+        companyCnpj: 'companyCnpj',
+        companyDistrict: 'companyDistrict',
+        companyEmail: 'companyEmail',
+        companyName: 'companyName',
+        companyNumber: 'companyNumber',
+        companyState: 'companyState',
+        companyTellphone: 'companyTellphone',
+        companyIsActived: true,
+        createdAt: 'createdAt',
+        updateAt: 'updateAt'
+    }
+
     async load(params: any): Promise<LoadTenantRepository.Result> {
         this.params = params
         return this.result
