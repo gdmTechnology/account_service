@@ -5,6 +5,7 @@ export interface AddAccount {
 export namespace AddAccount {
     export type Request = {
         email: string
+        tenant: string
         password: string
         identification: string
         name: string
