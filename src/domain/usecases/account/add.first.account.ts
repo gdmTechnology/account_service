@@ -1,8 +1,8 @@
-export interface AddFirstAdmin {
-    handle: (data: AddFirstAdmin.Request) => Promise<AddFirstAdmin.Result>
+export interface CreateAdmin {
+    handle: (data: CreateAdmin.Request) => Promise<CreateAdmin.Result>
 }
 
-export namespace AddFirstAdmin {
+export namespace CreateAdmin {
     export type Request = {
         email: string
         password: string

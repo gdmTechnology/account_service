@@ -19,7 +19,7 @@ export class SignUpController implements Controller {
                 return badRequest(error)
             }
             const { passwordConfirmation, ...newAccount } = data
-            const isValid = await this.addAccount.handle(newAccount)
+            const isValid = await this.addAccount.handle({ ...newAccount, role: 'user' })
 
             if (isValid === Constants.EmailInUseError) {
                 return forbidden(new EmailInUseError())
