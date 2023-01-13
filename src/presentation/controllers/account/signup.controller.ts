@@ -35,6 +35,7 @@ export namespace SignUpController {
     export interface Request {
         email: string
         password: string
+        tenant: string
         passwordConfirmation: string
         identification: string
         name: string
