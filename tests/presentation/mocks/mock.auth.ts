@@ -5,6 +5,7 @@ export class AuthSpy implements Authentication {
     result = {
         email: 'email',
         name: 'name',
+        tenant: 'tenant',
         identification: 'identification',
         lastName: 'lastName',
         birthDate: new Date(),

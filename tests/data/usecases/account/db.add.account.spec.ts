@@ -1,6 +1,7 @@
 import { AddAccount } from '@/domain/usecases'
 import { DbAddAccount } from '@/data/usecases'
 import { CheckAccountByEmailRepositorySpy, AddAccountRepositorySpy, HasherSpy, CreateUuidSpy, LoadTenantRepositorySpy } from '@/tests/data/mocks'
+import { Constants } from '@/helper'
 
 const throwError = (): never => {
     throw new Error()
@@ -115,6 +116,6 @@ describe('DbAddAccount Usecase', () => {
         const { sut, loadTenantRepositorySpy } = makeSut()
         jest.spyOn(loadTenantRepositorySpy, 'load').mockImplementationOnce(null)
         const response = await sut.handle(mockeRequest())
-        expect(response).toBeFalsy()
+        expect(response).toBe(Constants.NotFoundTenantError)
     })
 })

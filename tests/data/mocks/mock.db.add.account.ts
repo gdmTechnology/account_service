@@ -4,7 +4,7 @@ import { Hasher, CreateUuid } from '@/data/protocols/cryptography'
 export class CheckAccountByEmailRepositorySpy implements CheckAccountByEmailRepository {
     params: any
     result: any = false
-    async checkAccountByEmail(email: string): Promise<AddAccountRepository.Result> {
+    async checkAccountByEmail(email: string): Promise<CheckAccountByEmailRepository.Result> {
         this.params = email
         return this.result
     }

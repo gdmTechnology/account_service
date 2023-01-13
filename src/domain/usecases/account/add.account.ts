@@ -21,5 +21,5 @@ export namespace AddAccount {
         accessToken?: string
         role?: string
     }
-    export type Result = boolean
+    export type Result = boolean | string
 }

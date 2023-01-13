@@ -1,10 +1,12 @@
 import { SignUpController } from '@/presentation/controllers'
 import { ValidationSpy, AddAccountSpy, AuthSpy } from '../mocks'
 import { serverError, ok, forbidden } from '@/presentation/helpers/http.helper'
-import { EmailInUseError } from '@/presentation/errors'
+import { EmailInUseError, NotFoundTenantError } from '@/presentation/errors'
+import { Constants } from '@/helper'
 
 const mockRequest = (): SignUpController.Request => ({
     email: 'email',
+    tenant: 'tenant',
     password: 'password',
     passwordConfirmation: 'passwordConfirmation',
     identification: 'identification',
@@ -104,8 +106,16 @@ describe('SignUpController', () => {
     test('Should return 403 if email already is in use', async () => {
         const { sut, addAccountSpy } = makeSut()
         const request = mockRequest()
-        jest.spyOn(addAccountSpy, 'handle').mockReturnValueOnce(new Promise((resolve, reject) => resolve(false)))
+        jest.spyOn(addAccountSpy, 'handle').mockReturnValueOnce(new Promise((resolve, reject) => resolve(Constants.EmailInUseError)))
         const response = await sut.handle(request)
         expect(response).toEqual(forbidden(new EmailInUseError()))
+    })
+
+    test('Should return 403 if not found tenant', async () => {
+        const { sut, addAccountSpy } = makeSut()
+        const request = mockRequest()
+        jest.spyOn(addAccountSpy, 'handle').mockReturnValueOnce(new Promise((resolve, reject) => resolve(Constants.NotFoundTenantError)))
+        const response = await sut.handle(request)
+        expect(response).toEqual(forbidden(new NotFoundTenantError()))
     })
 })

@@ -1,8 +1,9 @@
 import { Controller } from '@/presentation/protocols/controller'
-import { EmailInUseError } from '@/presentation/errors'
+import { EmailInUseError, NotFoundTenantError } from '@/presentation/errors'
 import { AddAccount, Authentication } from '@/domain/usecases'
 import { badRequest, serverError, forbidden, ok } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols/validation'
+import { Constants } from '@/helper'
 
 export class SignUpController implements Controller {
     constructor(
@@ -19,8 +20,10 @@ export class SignUpController implements Controller {
             }
             const { passwordConfirmation, ...newAccount } = data
             const isValid = await this.addAccount.handle(newAccount)
-            if (!isValid) {
+            if (isValid === Constants.EmailInUseError) {
                 return forbidden(new EmailInUseError())
+            } else if (isValid === Constants.NotFoundTenantError) {
+                return forbidden(new NotFoundTenantError())
             }
             const { email, password } = data
             const auth = await this.authentication.handle({ email, password })
