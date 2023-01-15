@@ -179,4 +179,21 @@ describe('AccountMongoRepository', () => {
             expect(account).toBeNull()
         })
     })
+
+    describe('LoadAccountByIdRepository()', () => {
+        test('Should return an account on loadAccountById without role', async () => {
+            const sut = makeSut()
+            const request = addAccountParams()
+            await sut.save({ ...request })
+            const account = await sut.loadAccountById(request.identification)
+            expect(account).toBeDefined()
+        })
+
+        test('Should return null if loadAccountById fails', async () => {
+            const sut = makeSut()
+            const request = addAccountParamsWithRoleAdmin()
+            const account = await sut.loadAccountById(request.identification)
+            expect(account).toBeNull()
+        })
+    })
 })
