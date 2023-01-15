@@ -9,5 +9,5 @@ export const makeCreateAdmin = (): CreateAdmin => {
     const createUuid = new UuidGeneratorAdapter()
     const bcryptAdapter = new BCryptAdapter(salt)
     const accountMongoRepository = new AccountMongoRepository()
-    return new DbCreateAdmin(createUuid, bcryptAdapter, accountMongoRepository, accountMongoRepository)
+    return new DbCreateAdmin(createUuid, bcryptAdapter, accountMongoRepository, accountMongoRepository, accountMongoRepository)
 }

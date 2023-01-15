@@ -1,4 +1,4 @@
-import { CreateAdmin } from '@/domain/usecases'
+import { CreateFirstAdmin } from '@/domain/usecases'
 import { DbAddFirstAdmin } from '@/data/usecases'
 import { CheckAccountByEmailRepositorySpy, AddAccountRepositorySpy, HasherSpy, CreateUuidSpy } from '@/tests/data/mocks'
 import { Constants } from '@/helper'
@@ -7,9 +7,10 @@ const throwError = (): never => {
     throw new Error()
 }
 
-const mockeRequest = (): CreateAdmin.Request => ({
+const mockeRequest = (): CreateFirstAdmin.Request => ({
     email: 'email',
     password: 'password',
+    tenant: 'tenant',
     identification: 'any_id',
     name: 'name',
     lastName: 'lastName',
