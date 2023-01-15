@@ -2,9 +2,9 @@ import { DbAddFirstAdmin } from '@/data/usecases'
 import { UuidGeneratorAdapter } from '@/infra/identificationGenerator'
 import { BCryptAdapter } from '@/infra/cryptography'
 import { AccountMongoRepository } from '@/infra/db/mongodb'
-import { CreateAdmin } from '@/domain/usecases'
+import { CreateFirstAdmin } from '@/domain/usecases'
 
-export const makeDbAddFirstAdmin = (): CreateAdmin => {
+export const makeDbAddFirstAdmin = (): CreateFirstAdmin => {
     const salt = 12
     const createUuid = new UuidGeneratorAdapter()
     const bcryptAdapter = new BCryptAdapter(salt)

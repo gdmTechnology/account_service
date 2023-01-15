@@ -1,9 +1,9 @@
-import { CreateAdmin } from '@/domain/usecases'
+import { CreateFirstAdmin } from '@/domain/usecases'
 import { Hasher, CreateUuid } from '@/data/protocols/cryptography'
 import { AddAccountRepository, CheckAccountByEmailRepository } from '@/data/protocols/db'
 import { Constants } from '@/helper'
 
-export class DbAddFirstAdmin implements CreateAdmin {
+export class DbAddFirstAdmin implements CreateFirstAdmin {
     constructor(
         private readonly createUuid: CreateUuid,
         private readonly hasher: Hasher,
@@ -11,7 +11,7 @@ export class DbAddFirstAdmin implements CreateAdmin {
         private readonly addAccountRepository: AddAccountRepository
     ) { }
 
-    async handle(data: CreateAdmin.Request): Promise<CreateAdmin.Result> {
+    async handle(data: CreateFirstAdmin.Request): Promise<CreateFirstAdmin.Result> {
         const existsAcc = await this.checkAccountByEmailRepository.checkAccountByEmail(data.email)
         if (existsAcc) return Constants.EmailInUseError
 
