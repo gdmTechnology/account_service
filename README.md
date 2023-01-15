@@ -1,1 +1,1 @@
-# clean_architeture_template
+# account_service
