@@ -1,6 +1,7 @@
+import env from '@/main/config/env'
 import { CreateAdmin } from '@/domain/usecases'
 import { DbCreateAdmin } from '@/data/usecases'
-import { CheckAccountByEmailRepositorySpy, AddAccountRepositorySpy, HasherSpy, CreateUuidSpy, CheckAccountByIdRepositorySpy } from '@/tests/data/mocks'
+import { CheckAccountByEmailRepositorySpy, AddAccountRepositorySpy, HasherSpy, CreateUuidSpy, LoadAccountByIdRepositorySpy } from '@/tests/data/mocks'
 import { Constants } from '@/helper'
 
 const throwError = (): never => {
@@ -10,7 +11,7 @@ const throwError = (): never => {
 const accountId = 'accountId'
 
 const mockeRequest = (): CreateAdmin.Request => ({
-    email: 'email',
+    email: env.adminEmail,
     password: 'password',
     identification: 'any_id',
     tenant: '',
@@ -27,33 +28,49 @@ const mockeRequest = (): CreateAdmin.Request => ({
     role: 'admin'
 })
 
+const mockReturn = (): any => ({
+    email: 'invalid_email',
+    name: 'name',
+    lastName: 'lastName',
+    identification: 'identification',
+    birthDate: 'birthDate',
+    tellphone: 'tellphone',
+    cellphone: 'cellphone',
+    streetAddress: 'streetAddress',
+    numberAddress: 'numberAddress',
+    districtAddress: 'districtAddress',
+    cityAddress: 'cityAddress',
+    stateAddress: 'stateAddress',
+    accessToken: 'accessToken'
+})
+
 type SutTypes = {
     sut: DbCreateAdmin
     createUuidSpy: CreateUuidSpy
     hasherSpy: HasherSpy
     addAccountRepositorySpy: AddAccountRepositorySpy
+    loadAccountByIdRepositorySpy: LoadAccountByIdRepositorySpy
     checkAccountByEmailRepositorySpy: CheckAccountByEmailRepositorySpy
-    checkAccountByIdRepositorySpy: CheckAccountByIdRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
     const createUuidSpy = new CreateUuidSpy()
     const hasherSpy = new HasherSpy()
     const checkAccountByEmailRepositorySpy = new CheckAccountByEmailRepositorySpy()
-    const checkAccountByIdRepositorySpy = new CheckAccountByIdRepositorySpy()
+    const loadAccountByIdRepositorySpy = new LoadAccountByIdRepositorySpy()
     const addAccountRepositorySpy = new AddAccountRepositorySpy()
     const sut = new DbCreateAdmin(
         createUuidSpy,
         hasherSpy,
         checkAccountByEmailRepositorySpy,
-        checkAccountByIdRepositorySpy,
+        loadAccountByIdRepositorySpy,
         addAccountRepositorySpy
     )
     return {
         createUuidSpy,
         hasherSpy,
         checkAccountByEmailRepositorySpy,
-        checkAccountByIdRepositorySpy,
+        loadAccountByIdRepositorySpy,
         addAccountRepositorySpy,
         sut
     }
@@ -78,58 +95,60 @@ describe('DbCreateAdmin Usecase', () => {
         expect(response).toBe(Constants.EmailInUseError)
     })
     test('Should call Hasher with correct plaintext', async () => {
-        const { sut, hasherSpy, checkAccountByIdRepositorySpy } = makeSut()
-        jest.spyOn(checkAccountByIdRepositorySpy, 'checkAccountById').mockReturnValueOnce(new Promise(resolve => resolve(true)))
+        const { sut, hasherSpy } = makeSut()
         await sut.handle(mockeRequest(), accountId)
         expect(hasherSpy.plaintext).toBe(mockeRequest().password)
     })
     test('Should throw if Hasher throws', async () => {
-        const { sut, hasherSpy, checkAccountByIdRepositorySpy } = makeSut()
-        jest.spyOn(checkAccountByIdRepositorySpy, 'checkAccountById').mockReturnValueOnce(new Promise(resolve => resolve(true)))
+        const { sut, hasherSpy } = makeSut()
         jest.spyOn(hasherSpy, 'hash').mockImplementationOnce(throwError)
         const promise = sut.handle(mockeRequest(), accountId)
         await expect(promise).rejects.toThrow()
     })
     test('Should call AddAccountRepository with correct values ', async () => {
-        const { sut, addAccountRepositorySpy, hasherSpy, checkAccountByIdRepositorySpy } = makeSut()
-        jest.spyOn(checkAccountByIdRepositorySpy, 'checkAccountById').mockReturnValueOnce(new Promise(resolve => resolve(true)))
+        const { sut, addAccountRepositorySpy, hasherSpy } = makeSut()
         const request = mockeRequest()
         await sut.handle(request, accountId)
         expect(addAccountRepositorySpy.params).toEqual({ ...request, tenant: '', password: hasherSpy.digest })
     })
     test('Should throw if AddAccountRepository throws', async () => {
-        const { sut, addAccountRepositorySpy, checkAccountByIdRepositorySpy } = makeSut()
+        const { sut, addAccountRepositorySpy } = makeSut()
         const request = mockeRequest()
-        jest.spyOn(checkAccountByIdRepositorySpy, 'checkAccountById').mockReturnValueOnce(new Promise(resolve => resolve(true)))
         jest.spyOn(addAccountRepositorySpy, 'save').mockImplementationOnce(throwError)
         const promise = sut.handle(request, accountId)
         await expect(promise).rejects.toThrow()
     })
     test('Should throw if CreateUuid throws', async () => {
-        const { sut, createUuidSpy, checkAccountByIdRepositorySpy } = makeSut()
-        jest.spyOn(checkAccountByIdRepositorySpy, 'checkAccountById').mockReturnValueOnce(new Promise(resolve => resolve(true)))
+        const { sut, createUuidSpy } = makeSut()
         jest.spyOn(createUuidSpy, 'create').mockImplementationOnce(throwError)
         const promise = sut.handle(mockeRequest(), accountId)
         await expect(promise).rejects.toThrow()
     })
 
-    test('Should call CheckAccountByIdRepository with correct values ', async () => {
-        const { sut, checkAccountByIdRepositorySpy } = makeSut()
+    test('Should call LoadAccountByIdRepository with correct values ', async () => {
+        const { sut, loadAccountByIdRepositorySpy } = makeSut()
         const request = mockeRequest()
         await sut.handle(request, accountId)
-        expect(checkAccountByIdRepositorySpy.params).toEqual(accountId)
+        expect(loadAccountByIdRepositorySpy.params).toEqual(accountId)
     })
 
-    test('Should throw if CheckAccountByIdRepository throws', async () => {
-        const { sut, checkAccountByIdRepositorySpy } = makeSut()
-        jest.spyOn(checkAccountByIdRepositorySpy, 'checkAccountById').mockImplementationOnce(throwError)
+    test('Should throw if LoadAccountByIdRepository throws', async () => {
+        const { sut, loadAccountByIdRepositorySpy } = makeSut()
+        jest.spyOn(loadAccountByIdRepositorySpy, 'loadAccountById').mockImplementationOnce(throwError)
         const promise = sut.handle(mockeRequest(), accountId)
         await expect(promise).rejects.toThrow()
     })
 
-    test('Should return ForbiddenError if CheckAccountByIdRepository return null', async () => {
-        const { sut, checkAccountByIdRepositorySpy } = makeSut()
-        jest.spyOn(checkAccountByIdRepositorySpy, 'checkAccountById').mockReturnValueOnce(null)
+    test('Should return ForbiddenError if LoadAccountByIdRepository return null', async () => {
+        const { sut, loadAccountByIdRepositorySpy } = makeSut()
+        jest.spyOn(loadAccountByIdRepositorySpy, 'loadAccountById').mockReturnValueOnce(null)
+        const response = await sut.handle(mockeRequest(), accountId)
+        expect(response).toBe(Constants.Forbidden)
+    })
+
+    test('Should return ForbiddenError if LoadAccountByIdRepository return account that cant create admin users', async () => {
+        const { sut, loadAccountByIdRepositorySpy } = makeSut()
+        jest.spyOn(loadAccountByIdRepositorySpy, 'loadAccountById').mockReturnValueOnce(mockReturn())
         const response = await sut.handle(mockeRequest(), accountId)
         expect(response).toBe(Constants.Forbidden)
     })
