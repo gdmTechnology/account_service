@@ -114,4 +114,11 @@ describe('DbCreateAdmin Usecase', () => {
         await sut.handle(request, accountId)
         expect(checkAccountByIdRepositorySpy.params).toEqual(accountId)
     })
+
+    test('Should throw if CheckAccountByIdRepository throws', async () => {
+        const { sut, checkAccountByIdRepositorySpy } = makeSut()
+        jest.spyOn(checkAccountByIdRepositorySpy, 'checkAccountById').mockImplementationOnce(throwError)
+        const promise = sut.handle(mockeRequest(), accountId)
+        await expect(promise).rejects.toThrow()
+    })
 })
