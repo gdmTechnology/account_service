@@ -1,7 +1,7 @@
 import { CreateAdminController } from '@/presentation/controllers'
 import { ValidationSpy, AddAccountSpy, AuthSpy } from '../mocks'
 import { serverError, ok, forbidden } from '@/presentation/helpers/http.helper'
-import { EmailInUseError, NotFoundTenantError } from '@/presentation/errors'
+import { AccessDeniedError, EmailInUseError, NotFoundTenantError } from '@/presentation/errors'
 import { Constants } from '@/helper'
 
 const mockRequest = (): CreateAdminController.Request => ({
@@ -19,7 +19,8 @@ const mockRequest = (): CreateAdminController.Request => ({
     numberAddress: 'numberAddress',
     districtAddress: 'districtAddress',
     cityAddress: 'cityAddress',
-    stateAddress: 'stateAddress'
+    stateAddress: 'stateAddress',
+    accountId: 'accountId'
 })
 
 const throwError = (): never => {
@@ -98,7 +99,7 @@ describe('CreateAdminController', () => {
     test('Should return 200 if AddAccount and Authentication pass', async () => {
         const { sut } = makeSut()
         const request = mockRequest()
-        const { password, passwordConfirmation, ...rest } = request
+        const { password, passwordConfirmation, accountId, ...rest } = request
         const response = await sut.handle(request)
         expect(response).toEqual(ok({ ...rest, accessToken: 'accessToken' }))
     })
@@ -117,5 +118,13 @@ describe('CreateAdminController', () => {
         jest.spyOn(addAccountSpy, 'handle').mockReturnValueOnce(new Promise((resolve, reject) => resolve(Constants.NotFoundTenantError)))
         const response = await sut.handle(request)
         expect(response).toEqual(forbidden(new NotFoundTenantError()))
+    })
+
+    test('Should return 403 if admin is not authorized', async () => {
+        const { sut, addAccountSpy } = makeSut()
+        const request = mockRequest()
+        jest.spyOn(addAccountSpy, 'handle').mockReturnValueOnce(new Promise((resolve, reject) => resolve(Constants.Forbidden)))
+        const response = await sut.handle(request)
+        expect(response).toEqual(forbidden(new AccessDeniedError()))
     })
 })
