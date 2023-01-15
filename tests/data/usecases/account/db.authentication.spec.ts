@@ -20,7 +20,8 @@ const mockeRequest = (): AddAccount.Request => ({
     numberAddress: 'numberAddress',
     districtAddress: 'districtAddress',
     cityAddress: 'cityAddress',
-    stateAddress: 'stateAddress'
+    stateAddress: 'stateAddress',
+    role: null
 })
 
 type SutTypes = {

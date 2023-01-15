@@ -8,11 +8,11 @@ export class TenantMongoRepository implements AddTenantRepository, CheckTenantBy
         return result
     }
 
-    async check(email: string): Promise<CheckTenantByEmailRepository.Result> {
-        return await TenantModel.findOne({ email }).lean()
+    async check(companyEmail: string): Promise<CheckTenantByEmailRepository.Result> {
+        return await TenantModel.findOne({ companyEmail }).lean()
     }
 
-    async load(tenant: string): Promise<LoadTenantRepository.Result> {
-        return await TenantModel.findOne({ tenant }).lean()
+    async load(tenantId: string): Promise<LoadTenantRepository.Result> {
+        return await TenantModel.findOne({ tenantId }).lean()
     }
 }

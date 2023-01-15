@@ -10,6 +10,7 @@ const makeSut = (): AccountMongoRepository => {
 
 const addAccountParams = (): AddAccountRepository.Params => ({
     email: 'any_email@gmail.com',
+    tenant: 'tenant',
     password: 'any_password',
     identification: 'identification',
     name: 'name',
@@ -22,11 +23,13 @@ const addAccountParams = (): AddAccountRepository.Params => ({
     districtAddress: 'districtAddress',
     cityAddress: 'cityAddress',
     stateAddress: 'stateAddress',
-    accessToken: 'accessToken'
+    accessToken: 'accessToken',
+    role: null
 })
 
 const addAccountParamsWithRoleAdmin = (): AddAccountRepository.Params => ({
     email: 'adminl@gmail.com',
+    tenant: 'tenant',
     password: 'any_password',
     identification: 'admin_identification',
     name: 'name',

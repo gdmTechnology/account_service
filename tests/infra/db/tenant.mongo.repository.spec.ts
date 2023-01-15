@@ -62,12 +62,14 @@ describe('TenantMongoRepository', () => {
                 await sut.save(request)
                 const company = await sut.load(request.tenantId)
                 expect(company).toBeDefined()
+                expect(company).toHaveProperty('companyEmail')
             })
 
             test('Should return null if tenand is invalid', async () => {
                 const sut = makeSut()
                 const request = addTenantParams()
-                const company = await sut.load(request.tenantId)
+                await sut.save(request)
+                const company = await sut.load('invalid_tenant')
                 expect(company).toBeNull()
             })
         })

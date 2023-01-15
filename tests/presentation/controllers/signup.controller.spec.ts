@@ -66,7 +66,7 @@ describe('SignUpController', () => {
         const request = mockRequest()
         const { passwordConfirmation, ...rest } = request
         await sut.handle(request)
-        expect(addAccountSpy.input).toEqual({ ...rest, role: 'user' })
+        expect(addAccountSpy.input).toEqual({ ...rest, role: null })
     })
 
     test('Should return 500 if AddAccount throws', async () => {
