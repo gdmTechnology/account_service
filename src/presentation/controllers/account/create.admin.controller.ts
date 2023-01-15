@@ -1,6 +1,6 @@
 import { Controller } from '@/presentation/protocols/controller'
-import { EmailInUseError, NotFoundTenantError } from '@/presentation/errors'
-import { AddAccount, Authentication } from '@/domain/usecases'
+import { AccessDeniedError, EmailInUseError, NotFoundTenantError } from '@/presentation/errors'
+import { CreateAdmin, Authentication } from '@/domain/usecases'
 import { badRequest, serverError, forbidden, ok } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols/validation'
 import { Constants } from '@/helper'
@@ -8,7 +8,7 @@ import { Constants } from '@/helper'
 export class CreateAdminController implements Controller {
     constructor(
         private readonly validation: Validation,
-        private readonly addAccount: AddAccount,
+        private readonly addAccount: CreateAdmin,
         private readonly authentication: Authentication
     ) { }
 
@@ -20,11 +20,13 @@ export class CreateAdminController implements Controller {
             }
             const { passwordConfirmation, ...newAccount } = data
 
-            const isValid = await this.addAccount.handle({ ...newAccount, role: 'admin' })
+            const isValid = await this.addAccount.handle({ ...newAccount, role: 'admin' }, data.accountId)
             if (isValid === Constants.EmailInUseError) {
                 return forbidden(new EmailInUseError())
             } else if (isValid === Constants.NotFoundTenantError) {
                 return forbidden(new NotFoundTenantError())
+            } else if (isValid === Constants.Forbidden) {
+                return forbidden(new AccessDeniedError())
             }
             const { email, password } = data
             const auth = await this.authentication.handle({ email, password })
@@ -52,5 +54,6 @@ export namespace CreateAdminController {
         districtAddress: string
         cityAddress: string
         stateAddress: string
+        accountId: string
     }
 }

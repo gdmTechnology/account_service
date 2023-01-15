@@ -1,4 +1,5 @@
 export const Constants = {
     EmailInUseError: 'EmailInUseError',
-    NotFoundTenantError: 'NotFoundTenantError'
+    NotFoundTenantError: 'NotFoundTenantError',
+    Forbidden: 'Forbidden'
 }
