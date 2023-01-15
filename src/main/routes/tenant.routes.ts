@@ -2,8 +2,8 @@ import { adaptRoute } from '@/main/adapters'
 import { makeCreateTenantController } from '@/main/factories'
 
 import { Router } from 'express'
-import { auth } from '@/main/middlewares'
+import { authAdmin } from '@/main/middlewares'
 
 export default (router: Router): void => {
-    router.post('/tenant', auth, adaptRoute(makeCreateTenantController()))
+    router.post('/tenant', authAdmin, adaptRoute(makeCreateTenantController()))
 }
