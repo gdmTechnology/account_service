@@ -67,4 +67,12 @@ describe('DeleteAccountController', () => {
         const httpResponse = await sut.handle(request)
         expect(httpResponse.statusCode).toBe(200)
     })
+
+    test('Should return 400 if deleteAccount fails', async () => {
+        const { sut, deleteAccountSpy } = makeSut()
+        deleteAccountSpy.result = false
+        const request = mockRequest()
+        const httpResponse = await sut.handle(request)
+        expect(httpResponse.statusCode).toBe(400)
+    })
 })
