@@ -1,6 +1,6 @@
 import { ListUsers } from '@/domain/usecases'
 import { Controller, HttpResponse } from '@/presentation/protocols'
-import { ok } from '@/presentation/helpers'
+import { ok, serverError } from '@/presentation/helpers'
 
 export class ListUsersController implements Controller {
     constructor(
@@ -8,8 +8,12 @@ export class ListUsersController implements Controller {
     ) { }
 
     async handle(): Promise<HttpResponse> {
-        const users = await this.listUsers.handle()
-        return ok(users)
+        try {
+            const users = await this.listUsers.handle()
+            return ok(users)
+        } catch (error) {
+            return serverError(error)
+        }
     }
 }
 
