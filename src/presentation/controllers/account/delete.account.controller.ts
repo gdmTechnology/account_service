@@ -17,7 +17,8 @@ export class DeleteAccountController implements Controller {
             if (isError) {
                 return badRequest(isError)
             }
-            await this.deleteAccount.handle(data.identification)
+            const isDeleted = await this.deleteAccount.handle(data.identification)
+            if (isDeleted) return ok(isDeleted)
         } catch (error) {
             return serverError(error)
         }
