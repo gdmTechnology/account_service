@@ -27,4 +27,13 @@ describe('DbListUsers Usecase', () => {
         const promise = sut.handle()
         await expect(promise).rejects.toThrow()
     })
+
+    test('Should return a list of accounts if ListUsersRepository succeds', async () => {
+        const { sut } = makeSut()
+        const users = await sut.handle()
+        expect(users.length).toBe(1)
+        expect(users[0]).toHaveProperty('identification')
+        expect(users[0]).toHaveProperty('email')
+        expect(users[0]).toBeDefined()
+    })
 })
