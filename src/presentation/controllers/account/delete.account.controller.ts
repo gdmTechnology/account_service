@@ -1,5 +1,5 @@
 import { Controller } from '@/presentation/protocols/controller'
-import { EmailInUseError, NotFoundTenantError } from '@/presentation/errors'
+import { NotFoundIdentificationError } from '@/presentation/errors'
 import { AddAccount, DeleteAccount } from '@/domain/usecases'
 import { badRequest, serverError, forbidden, ok } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols/validation'
@@ -19,6 +19,7 @@ export class DeleteAccountController implements Controller {
             }
             const isDeleted = await this.deleteAccount.handle(data.identification)
             if (isDeleted) return ok(isDeleted)
+            return badRequest(new NotFoundIdentificationError())
         } catch (error) {
             return serverError(error)
         }
