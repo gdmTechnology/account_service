@@ -41,4 +41,13 @@ describe('DeleteAccountController', () => {
         const httpResponse = await sut.handle(request)
         expect(httpResponse.statusCode).toBe(400)
     })
+
+    test('Should return 500 if validation throw', async () => {
+        const { sut, validationSpy } = makeSut()
+        validationSpy.error = new Error()
+        jest.spyOn(validationSpy, 'validate').mockImplementationOnce(throwError)
+        const request = mockRequest()
+        const httpResponse = await sut.handle(request)
+        expect(httpResponse.statusCode).toBe(500)
+    })
 })
