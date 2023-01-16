@@ -4,6 +4,7 @@ import { CreateAdmin, Authentication } from '@/domain/usecases'
 import { badRequest, serverError, forbidden, ok } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols/validation'
 import { Constants } from '@/helper'
+import { HttpResponse } from '@/presentation/protocols'
 
 export class CreateAdminController implements Controller {
     constructor(
@@ -12,7 +13,7 @@ export class CreateAdminController implements Controller {
         private readonly authentication: Authentication
     ) { }
 
-    async handle(data: CreateAdminController.Request): Promise<any> {
+    async handle(data: CreateAdminController.Request): Promise<HttpResponse> {
         try {
             const error = this.validation.validate(data)
             if (error) {
