@@ -1,0 +1,33 @@
+import { DbDeleteAccount } from '@/data/usecases'
+import { LoadAccountByIdRepositorySpy } from '@/tests/data/mocks'
+
+const throwError = (): never => {
+    throw new Error()
+}
+
+const mockeRequest = (): string => 'identification'
+
+type SutTypes = {
+    sut: DbDeleteAccount
+    loadAccountByIdRepositorySpy: LoadAccountByIdRepositorySpy
+}
+
+const makeSut = (): SutTypes => {
+    const loadAccountByIdRepositorySpy = new LoadAccountByIdRepositorySpy()
+    const sut = new DbDeleteAccount(
+        loadAccountByIdRepositorySpy
+    )
+    return {
+        loadAccountByIdRepositorySpy,
+        sut
+    }
+}
+
+describe('DbDeleteAccount Usecase', () => {
+    test('Should call LoadAccountByIdRepository with correct values ', async () => {
+        const { sut, loadAccountByIdRepositorySpy } = makeSut()
+        const request = mockeRequest()
+        await sut.handle(request)
+        expect(loadAccountByIdRepositorySpy.params).toBe(request)
+    })
+})
