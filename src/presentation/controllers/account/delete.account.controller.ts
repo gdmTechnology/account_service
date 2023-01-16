@@ -11,9 +11,13 @@ export class DeleteAccountController implements Controller {
     ) { }
 
     async handle(data: DeleteAccountController.Request): Promise<any> {
-        const isError = this.validation.validate(data)
-        if (isError) {
-            return badRequest(isError)
+        try {
+            const isError = this.validation.validate(data)
+            if (isError) {
+                return badRequest(isError)
+            }
+        } catch (error) {
+            return serverError(error)
         }
     }
 }
