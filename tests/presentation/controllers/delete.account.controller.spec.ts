@@ -1,11 +1,11 @@
 import { DeleteAccountController } from '@/presentation/controllers'
-import { ValidationSpy } from '../mocks'
+import { ValidationSpy, DeleteAccountSpy } from '../mocks'
 import { serverError, ok, forbidden } from '@/presentation/helpers/http.helper'
 import { EmailInUseError, NotFoundTenantError } from '@/presentation/errors'
 import { Constants } from '@/helper'
 
 const mockRequest = (): DeleteAccountController.Request => ({
-    identification: 'id'
+    identification: 'identification'
 })
 
 const throwError = (): never => {
@@ -15,13 +15,16 @@ const throwError = (): never => {
 type SutTypes = {
     sut: DeleteAccountController
     validationSpy: ValidationSpy
+    deleteAccountSpy: DeleteAccountSpy
 }
 
 const makeSut = (): SutTypes => {
     const validationSpy = new ValidationSpy()
-    const sut = new DeleteAccountController(validationSpy)
+    const deleteAccountSpy = new DeleteAccountSpy()
+    const sut = new DeleteAccountController(validationSpy, deleteAccountSpy)
     return {
         validationSpy,
+        deleteAccountSpy,
         sut
     }
 }
@@ -49,5 +52,12 @@ describe('DeleteAccountController', () => {
         const request = mockRequest()
         const httpResponse = await sut.handle(request)
         expect(httpResponse.statusCode).toBe(500)
+    })
+
+    test('Should call deleteAccount with correct value', async () => {
+        const { sut, deleteAccountSpy } = makeSut()
+        const request = mockRequest()
+        await sut.handle(request)
+        expect(deleteAccountSpy.input).toBe(request.identification)
     })
 })
