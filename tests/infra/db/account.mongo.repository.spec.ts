@@ -196,4 +196,21 @@ describe('AccountMongoRepository', () => {
             expect(account).toBeNull()
         })
     })
+
+    describe('ListUsersRepository()', () => {
+        test('Should return a list of accounts', async () => {
+            const sut = makeSut()
+            const request = addAccountParams()
+            await sut.save({ ...request })
+            const accountList = await sut.list()
+            expect(accountList.length).toBeGreaterThan(0)
+        })
+
+        // test('Should return null if loadAccountById fails', async () => {
+        //     const sut = makeSut()
+        //     const request = addAccountParamsWithRoleAdmin()
+        //     const account = await sut.list()
+        //     expect(account).toBeNull()
+        // })
+    })
 })
