@@ -1,7 +1,7 @@
-import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByIdRepository, UpdateAccessTokenRepository, UpdateAccountRepository, LoadAccountByTokenRepository, LoadAccountByEmailRepository, LoadAccountByIdRepository } from '@/data/protocols'
+import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByIdRepository, UpdateAccessTokenRepository, UpdateAccountRepository, LoadAccountByTokenRepository, LoadAccountByEmailRepository, LoadAccountByIdRepository, ListUsersRepository } from '@/data/protocols'
 import { AccountModel } from './models'
 
-export class AccountMongoRepository implements AddAccountRepository, UpdateAccountRepository, CheckAccountByIdRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository, LoadAccountByIdRepository {
+export class AccountMongoRepository implements AddAccountRepository, UpdateAccountRepository, CheckAccountByIdRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository, LoadAccountByIdRepository, ListUsersRepository {
     async save(data: AddAccountRepository.Params): Promise<AddAccountRepository.Result> {
         const model = new AccountModel(data)
         const result = await model.save()
@@ -46,5 +46,9 @@ export class AccountMongoRepository implements AddAccountRepository, UpdateAccou
     async loadAccountById(identification: string): Promise<LoadAccountByIdRepository.Result | null> {
         const result = await AccountModel.findOne({ identification }).lean()
         return result
+    }
+
+    async list(): Promise<ListUsersRepository.Result> {
+        return await AccountModel.find().lean()
     }
 }
