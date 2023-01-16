@@ -1,10 +1,8 @@
 import { Controller } from '@/presentation/protocols/controller'
 import { NotFoundIdentificationError } from '@/presentation/errors'
-import { AddAccount, DeleteAccount } from '@/domain/usecases'
-import { badRequest, serverError, forbidden, ok } from '@/presentation/helpers'
+import { DeleteAccount } from '@/domain/usecases'
+import { badRequest, serverError, ok } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols/validation'
-import { Constants } from '@/helper'
-
 export class DeleteAccountController implements Controller {
     constructor(
         private readonly validation: Validation,
