@@ -75,4 +75,13 @@ describe('DeleteAccountController', () => {
         const httpResponse = await sut.handle(request)
         expect(httpResponse.statusCode).toBe(400)
     })
+
+    test('Should return 500 if deleteAccount throw', async () => {
+        const { sut, deleteAccountSpy } = makeSut()
+        deleteAccountSpy.result = false
+        jest.spyOn(deleteAccountSpy, 'handle').mockImplementationOnce(throwError)
+        const request = mockRequest()
+        const httpResponse = await sut.handle(request)
+        expect(httpResponse.statusCode).toBe(500)
+    })
 })
