@@ -1,5 +1,5 @@
 import { DbDeleteAccount } from '@/data/usecases'
-import { LoadAccountByIdRepositorySpy } from '@/tests/data/mocks'
+import { LoadAccountByIdRepositorySpy, DeleteAccountRepositorySpy } from '@/tests/data/mocks'
 
 const throwError = (): never => {
     throw new Error()
@@ -10,15 +10,19 @@ const mockeRequest = (): string => 'identification'
 type SutTypes = {
     sut: DbDeleteAccount
     loadAccountByIdRepositorySpy: LoadAccountByIdRepositorySpy
+    deleteAccountRepositorySpy: DeleteAccountRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
     const loadAccountByIdRepositorySpy = new LoadAccountByIdRepositorySpy()
+    const deleteAccountRepositorySpy = new DeleteAccountRepositorySpy()
     const sut = new DbDeleteAccount(
-        loadAccountByIdRepositorySpy
+        loadAccountByIdRepositorySpy,
+        deleteAccountRepositorySpy
     )
     return {
         loadAccountByIdRepositorySpy,
+        deleteAccountRepositorySpy,
         sut
     }
 }
@@ -44,5 +48,12 @@ describe('DbDeleteAccount Usecase', () => {
         const request = mockeRequest()
         const promise = sut.handle(request)
         await expect(promise).rejects.toThrow()
+    })
+
+    test('Should call DeleteAccountRepository with correct values', async () => {
+        const { sut, deleteAccountRepositorySpy } = makeSut()
+        const request = mockeRequest()
+        await sut.handle(request)
+        expect(deleteAccountRepositorySpy.params).toBe(request)
     })
 })
