@@ -212,4 +212,23 @@ describe('AccountMongoRepository', () => {
             expect(accountList.length).toBe(0)
         })
     })
+
+    describe('DeleteAccountRepository()', () => {
+        test('Should delete an account', async () => {
+            const sut = makeSut()
+            const request = addAccountParams()
+            await sut.save({ ...request })
+            const account = await sut.loadAccountById(request.identification)
+            expect(account).toHaveProperty('identification')
+            const deleted = await sut.delete(request.identification)
+            expect(deleted).toBe(true)
+        })
+
+        test('Should return false if identification is invalid', async () => {
+            const sut = makeSut()
+            const request = addAccountParams()
+            const deleted = await sut.delete(request.identification)
+            expect(deleted).toBe(false)
+        })
+    })
 })
