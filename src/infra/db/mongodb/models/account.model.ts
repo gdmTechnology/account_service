@@ -31,6 +31,10 @@ const AccountSchema = new Schema({
     stateAddress: String,
     accessToken: String,
     role: String,
+    isActive: {
+        type: Boolean,
+        default: true
+    },
     isLogged: {
         type: Boolean,
         default: true

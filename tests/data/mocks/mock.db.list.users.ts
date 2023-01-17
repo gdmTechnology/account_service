@@ -23,7 +23,8 @@ const account = {
     stateAddress: 'Minas Gerais',
     role: 'admin',
     isLogged: true,
+    isActive: true,
     createdAt: new Date(),
     updatedAt: new Date(),
     accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA4MmI1OWRhLTc5M2EtNGEzMC05Zjg3LTg1MWNhYmIzZDJjNyIsImlhdCI6MTY3MzgxNjU4Nn0.kWkCRiKGbpyMUdnM_P4j8qJ-6p5VAAaTeDQC4LQES6Y'
-} 
+}

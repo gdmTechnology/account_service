@@ -22,6 +22,7 @@ type AccountType = {
     stateAddress: string
     role: string
     isLogged: boolean
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
     accessToken: string
