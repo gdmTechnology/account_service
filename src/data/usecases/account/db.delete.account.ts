@@ -10,6 +10,7 @@ export class DbDeleteAccount implements DeleteAccount {
     async handle(identification: string): Promise<any> {
         const account = await this.loadAccountByIdRepository.loadAccountById(identification)
         if (!account) return !!account
-        await this.deleteAccountRepository.delete(identification)
+        const isDeleted = await this.deleteAccountRepository.delete(identification)
+        if (!isDeleted) return !!isDeleted
     }
 }
