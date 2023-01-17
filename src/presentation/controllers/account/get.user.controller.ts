@@ -1,6 +1,6 @@
 import { ListUsers, GetUser } from '@/domain/usecases'
 import { Controller, HttpResponse } from '@/presentation/protocols'
-import { ok, serverError } from '@/presentation/helpers'
+import { badRequest, ok, serverError } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols/validation'
 
 export class GetUserController implements Controller {
@@ -11,7 +11,10 @@ export class GetUserController implements Controller {
 
     async handle(data: GetUserController.Request): Promise<any> {
         // try {
-        this.validation.validate(data)
+        const error = this.validation.validate(data)
+        if (error) {
+            return badRequest(error)
+        }
         const user = await this.getUser.handle(data)
         //     return ok(users)
         // } catch (error) {
