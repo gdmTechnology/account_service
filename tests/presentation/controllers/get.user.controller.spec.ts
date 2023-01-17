@@ -36,6 +36,13 @@ describe('GetUserController', () => {
         const httpResponse = await sut.handle(request)
         expect(httpResponse.statusCode).toBe(400)
     })
+    test('Should return 500 if validation throw', async () => {
+        const { sut, validationSpy } = makeSut()
+        jest.spyOn(validationSpy, 'validate').mockImplementationOnce(throwError)
+        const request = mockRequest()
+        const httpResponse = await sut.handle(request)
+        expect(httpResponse.statusCode).toBe(500)
+    })
     test('Should call GetUser with correct values', async () => {
         const { sut, getUserSpy } = makeSut()
         const request = mockRequest()
