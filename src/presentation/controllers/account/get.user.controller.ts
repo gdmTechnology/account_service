@@ -10,16 +10,16 @@ export class GetUserController implements Controller {
     ) { }
 
     async handle(data: GetUserController.Request): Promise<any> {
-        // try {
-        const error = this.validation.validate(data)
-        if (error) {
-            return badRequest(error)
+        try {
+            const error = this.validation.validate(data)
+            if (error) {
+                return badRequest(error)
+            }
+            const user = await this.getUser.handle(data)
+            //     return ok(users)
+        } catch (error) {
+            return serverError(error)
         }
-        const user = await this.getUser.handle(data)
-        //     return ok(users)
-        // } catch (error) {
-        //     return serverError(error)
-        // }
     }
 }
 
