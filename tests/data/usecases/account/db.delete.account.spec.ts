@@ -56,4 +56,11 @@ describe('DbDeleteAccount Usecase', () => {
         await sut.handle(request)
         expect(deleteAccountRepositorySpy.params).toBe(request)
     })
+
+    test('Should return false if DeleteAccountRepository return null', async () => {
+        const { sut } = makeSut()
+        const request = mockeRequest()
+        const result = await sut.handle(request)
+        expect(result).toBeFalsy()
+    })
 })
