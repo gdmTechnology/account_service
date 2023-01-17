@@ -9,6 +9,7 @@ export class DbDeleteAccount implements DeleteAccount {
     ) { }
 
     async handle(identification: string): Promise<any> {
-        await this.loadAccountByIdRepository.loadAccountById(identification)
+        const account = await this.loadAccountByIdRepository.loadAccountById(identification)
+        if (!account) return !!account
     }
 }
