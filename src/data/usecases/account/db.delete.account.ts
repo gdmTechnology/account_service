@@ -6,7 +6,7 @@ export class DbDeleteAccount implements DeleteAccount {
         private readonly deleteAccountRepository: DeleteAccountRepository
     ) { }
 
-    async handle(identification: string): Promise<any> {
+    async handle(identification: string): Promise<DeleteAccount.Result> {
         const isDeleted = await this.deleteAccountRepository.delete(identification)
         return isDeleted
     }
