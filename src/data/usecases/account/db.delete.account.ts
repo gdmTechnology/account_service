@@ -11,7 +11,6 @@ export class DbDeleteAccount implements DeleteAccount {
         const account = await this.loadAccountByIdRepository.loadAccountById(identification)
         if (!account) return !!account
         const isDeleted = await this.deleteAccountRepository.delete(identification)
-        if (!isDeleted) return false
-        return true
+        return isDeleted
     }
 }

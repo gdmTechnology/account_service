@@ -1,7 +1,15 @@
-import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByIdRepository, UpdateAccessTokenRepository, UpdateAccountRepository, LoadAccountByTokenRepository, LoadAccountByEmailRepository, LoadAccountByIdRepository, ListUsersRepository } from '@/data/protocols'
+import { AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByIdRepository, UpdateAccessTokenRepository, UpdateAccountRepository, LoadAccountByTokenRepository, LoadAccountByEmailRepository, LoadAccountByIdRepository, ListUsersRepository, DeleteAccountRepository } from '@/data/protocols'
 import { AccountModel } from './models'
 
-export class AccountMongoRepository implements AddAccountRepository, UpdateAccountRepository, CheckAccountByIdRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository, LoadAccountByIdRepository, ListUsersRepository {
+export class AccountMongoRepository implements
+    AddAccountRepository,
+    UpdateAccountRepository,
+    CheckAccountByIdRepository,
+    UpdateAccessTokenRepository,
+    LoadAccountByTokenRepository,
+    LoadAccountByIdRepository,
+    ListUsersRepository,
+    DeleteAccountRepository {
     async save(data: AddAccountRepository.Params): Promise<AddAccountRepository.Result> {
         const model = new AccountModel(data)
         const result = await model.save()
@@ -50,5 +58,11 @@ export class AccountMongoRepository implements AddAccountRepository, UpdateAccou
 
     async list(): Promise<ListUsersRepository.Result> {
         return await AccountModel.find().lean()
+    }
+
+    async delete(identification: string): Promise<DeleteAccountRepository.Result> {
+        const filter = { identification }
+        const account = await AccountModel.deleteOne(filter).lean()
+        return !!account.deletedCount
     }
 }
