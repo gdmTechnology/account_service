@@ -1,8 +1,9 @@
 import { GetUserController } from '@/presentation/controllers'
-import { GetUserSpy } from '@/tests/presentation/mocks'
+import { GetUserSpy, ValidationSpy } from '@/tests/presentation/mocks'
 
 type SutTypes = {
     getUserSpy: GetUserSpy
+    validationSpy: ValidationSpy
     sut: GetUserController
 }
 
@@ -12,8 +13,9 @@ const throwError = (): never => {
 
 const makeSut = (): SutTypes => {
     const getUserSpy = new GetUserSpy()
-    const sut = new GetUserController(getUserSpy)
-    return { sut, getUserSpy }
+    const validationSpy = new ValidationSpy()
+    const sut = new GetUserController(validationSpy, getUserSpy)
+    return { sut, validationSpy, getUserSpy }
 }
 
 const mockRequest = (): any => ({
@@ -21,6 +23,12 @@ const mockRequest = (): any => ({
 })
 
 describe('GetUserController', () => {
+    test('Should call Validation with correct values', async () => {
+        const { sut, validationSpy } = makeSut()
+        const request = mockRequest()
+        await sut.handle(request)
+        expect(validationSpy.input).toEqual(request)
+    })
     test('Should call GetUser with correct values', async () => {
         const { sut, getUserSpy } = makeSut()
         const request = mockRequest()
