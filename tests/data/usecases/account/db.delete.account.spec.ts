@@ -24,10 +24,17 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbDeleteAccount Usecase', () => {
-    test('Should call LoadAccountByIdRepository with correct values ', async () => {
+    test('Should call LoadAccountByIdRepository with correct values', async () => {
         const { sut, loadAccountByIdRepositorySpy } = makeSut()
         const request = mockeRequest()
         await sut.handle(request)
         expect(loadAccountByIdRepositorySpy.params).toBe(request)
+    })
+
+    test('Should return false if LoadAccountByIdRepository return null', async () => {
+        const { sut } = makeSut()
+        const request = mockeRequest()
+        const result = await sut.handle(request)
+        expect(result).toBeFalsy()
     })
 })
