@@ -28,4 +28,11 @@ describe('DbGetUser', () => {
         await sut.handle(request)
         expect(checkAccountByIdRepositorySpy.params).toEqual(request.identification)
     })
+    test('Should throw if CheckAccountByIdRepository throws', async () => {
+        const { sut, checkAccountByIdRepositorySpy } = makeSut()
+        const request = mockRequest()
+        jest.spyOn(checkAccountByIdRepositorySpy, 'checkAccountById').mockImplementationOnce(throwError)
+        const promise = sut.handle(request)
+        await expect(promise).rejects.toThrow()
+    })
 })
