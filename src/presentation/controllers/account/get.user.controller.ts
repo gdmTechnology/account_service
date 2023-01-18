@@ -2,6 +2,7 @@ import { ListUsers, GetUser } from '@/domain/usecases'
 import { Controller, HttpResponse } from '@/presentation/protocols'
 import { badRequest, ok, serverError } from '@/presentation/helpers'
 import { Validation } from '@/presentation/protocols/validation'
+import { NotFoundIdentificationError } from '@/presentation/errors'
 
 export class GetUserController implements Controller {
     constructor(
@@ -16,7 +17,8 @@ export class GetUserController implements Controller {
                 return badRequest(error)
             }
             const user = await this.getUser.handle(data)
-            //     return ok(users)
+            if (!user) return badRequest(new NotFoundIdentificationError())
+            return ok(user)
         } catch (error) {
             return serverError(error)
         }
