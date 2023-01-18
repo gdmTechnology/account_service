@@ -3,8 +3,8 @@ import { CheckAccountByIdRepository, UpdateAccountRepository } from '@/data/prot
 export class CheckAccountByIdRepositorySpy implements CheckAccountByIdRepository {
     params: any
     result: any = false
-    async checkAccountById(email: string): Promise<CheckAccountByIdRepository.Result> {
-        this.params = email
+    async checkAccountById(data: string): Promise<CheckAccountByIdRepository.Result> {
+        this.params = data
         return this.result
     }
 }
