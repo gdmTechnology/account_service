@@ -35,4 +35,10 @@ describe('DbGetUser', () => {
         const promise = sut.handle(request)
         await expect(promise).rejects.toThrow()
     })
+    test('Should return false if CheckAccountByIdRepository return null', async () => {
+        const { sut } = makeSut()
+        const request = mockRequest()
+        const result = await sut.handle(request)
+        expect(result).toBeFalsy()
+    })
 })
