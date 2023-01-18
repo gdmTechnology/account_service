@@ -49,12 +49,17 @@ describe('GetUserController', () => {
         await sut.handle(request)
         expect(getUserSpy.input).toEqual(request)
     })
-
     test('Should return 400 if GetUser fail', async () => {
         const { sut, getUserSpy } = makeSut()
         getUserSpy.result = null
         const request = mockRequest()
         const httpResponse = await sut.handle(request)
         expect(httpResponse.statusCode).toBe(400)
+    })
+    test('Should return 200 if GetUser succeds', async () => {
+        const { sut } = makeSut()
+        const request = mockRequest()
+        const httpResponse = await sut.handle(request)
+        expect(httpResponse.statusCode).toBe(200)
     })
 })
