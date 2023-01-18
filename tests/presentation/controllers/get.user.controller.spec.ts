@@ -50,17 +50,11 @@ describe('GetUserController', () => {
         expect(getUserSpy.input).toEqual(request)
     })
 
-    // test('Should return 200 if GetUser succeds', async () => {
-    //     const { sut } = makeSut()
-    //     const request = mockRequest()
-    //     const user = await sut.handle(request)
-    //     expect(user.statusCode).toEqual(200)
-    // })
-
-    // test('Should return 500 if ListUsers throws', async () => {
-    //     const { sut, listUsersSpy } = makeSut()
-    //     jest.spyOn(listUsersSpy, 'handle').mockImplementationOnce(throwError)
-    //     const users = await sut.handle()
-    //     expect(users.statusCode).toEqual(500)
-    // })
+    test('Should return 400 if GetUser fail', async () => {
+        const { sut, getUserSpy } = makeSut()
+        getUserSpy.result = null
+        const request = mockRequest()
+        const httpResponse = await sut.handle(request)
+        expect(httpResponse.statusCode).toBe(400)
+    })
 })
