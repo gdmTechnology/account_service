@@ -9,7 +9,7 @@ export class DbGetUser implements GetUser {
 
     async handle(data: GetUser.Request): Promise<any> {
         const exists = await this.checkAccountByIdRepository.checkAccountById(data.identification)
-        // if (!exists) return exists
+        if (!exists) return exists
         // return await this.updateAccountRepository.update(data)
     }
 }
