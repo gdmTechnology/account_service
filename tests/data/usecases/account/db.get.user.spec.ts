@@ -36,9 +36,16 @@ describe('DbGetUser', () => {
         await expect(promise).rejects.toThrow()
     })
     test('Should return false if LoadAccountByIdRepositorySpy return null', async () => {
+        const { sut, loadAccountByIdRepositorySpy } = makeSut()
+        const request = mockRequest()
+        loadAccountByIdRepositorySpy.result = null
+        const result = await sut.handle(request)
+        expect(result).toBeFalsy()
+    })
+    test('Should return account if LoadAccountByIdRepositorySpy succeds', async () => {
         const { sut } = makeSut()
         const request = mockRequest()
         const result = await sut.handle(request)
-        expect(result).toBeFalsy()
+        expect(result).toHaveProperty('identification')
     })
 })
