@@ -20,5 +20,11 @@ export namespace LoadAccountById {
         districtAddress?: string
         cityAddress?: string
         stateAddress?: string
+        createdAt?: string
+        updatedAt?: string
+        role?: string
+        isLogged: string
+        isActive: string
+        accessToken: string
     }
 }

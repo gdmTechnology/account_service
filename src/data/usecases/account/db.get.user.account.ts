@@ -6,7 +6,7 @@ export class DbGetUser implements GetUser {
         private readonly loadAccountByIdRepository: LoadAccountByIdRepository
     ) { }
 
-    async handle(data: GetUser.Request): Promise<any> {
+    async handle(data: GetUser.Request): Promise<GetUser.Result | null> {
         const exists = await this.loadAccountByIdRepository.loadAccountById(data.identification)
         return exists
     }

@@ -10,23 +10,23 @@ export namespace GetUser {
 }
 
 type AccountType = {
-    identification: string
     email: string
     password: string
+    identification: string
     name: string
-    lastName: string
-    birthDate: Date
-    tellphone: string
-    cellphone: string
-    streetAddress: string
-    numberAddress: string
-    districtAddress: string
-    cityAddress: string
-    stateAddress: string
-    role: string
-    isLogged: boolean
-    isActive: boolean
-    createdAt: Date
-    updatedAt: Date
+    lastName?: string
+    birthDate?: Date
+    tellphone?: string
+    cellphone?: string
+    streetAddress?: string
+    numberAddress?: string
+    districtAddress?: string
+    cityAddress?: string
+    stateAddress?: string
+    createdAt?: string
+    updatedAt?: string
+    role?: string
+    isLogged: string
+    isActive: string
     accessToken: string
 }
