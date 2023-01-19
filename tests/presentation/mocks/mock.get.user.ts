@@ -1,9 +1,9 @@
-import { GetUser } from '@/domain/usecases'
+import { LoadAccountById } from '@/domain/usecases'
 
-export class GetUserSpy implements GetUser {
+export class LoadAccountByIdSpy implements LoadAccountById {
     result: any = account
     input: any
-    async handle(input: GetUser.Request): Promise<GetUser.Result> {
+    async handle(input: LoadAccountById.Request): Promise<LoadAccountById.Result> {
         this.input = input
         return this.result
     }

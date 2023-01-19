@@ -1,8 +1,8 @@
-import { GetUser } from '@/domain/usecases'
-import { DbGetUser } from '@/data/usecases'
+import { LoadAccountById } from '@/domain/usecases'
+import { DbLoadAccountById } from '@/data/usecases'
 import { AccountMongoRepository } from '@/infra/db/mongodb'
 
-export const makeDbLoadAccountById = (): GetUser => {
+export const makeDbLoadAccountById = (): LoadAccountById => {
     const loadAccountByIdRepository = new AccountMongoRepository()
-    return new DbGetUser(loadAccountByIdRepository)
+    return new DbLoadAccountById(loadAccountByIdRepository)
 }

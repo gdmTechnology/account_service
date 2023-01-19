@@ -1,8 +1,8 @@
 import { GetUserController } from '@/presentation/controllers'
-import { GetUserSpy, ValidationSpy } from '@/tests/presentation/mocks'
+import { LoadAccountByIdSpy, ValidationSpy } from '@/tests/presentation/mocks'
 
 type SutTypes = {
-    getUserSpy: GetUserSpy
+    loadAccountByIdSpy: LoadAccountByIdSpy
     validationSpy: ValidationSpy
     sut: GetUserController
 }
@@ -12,10 +12,10 @@ const throwError = (): never => {
 }
 
 const makeSut = (): SutTypes => {
-    const getUserSpy = new GetUserSpy()
+    const loadAccountByIdSpy = new LoadAccountByIdSpy()
     const validationSpy = new ValidationSpy()
-    const sut = new GetUserController(validationSpy, getUserSpy)
-    return { sut, validationSpy, getUserSpy }
+    const sut = new GetUserController(validationSpy, loadAccountByIdSpy)
+    return { sut, validationSpy, loadAccountByIdSpy }
 }
 
 const mockRequest = (): any => ({
@@ -44,14 +44,14 @@ describe('GetUserController', () => {
         expect(httpResponse.statusCode).toBe(500)
     })
     test('Should call GetUser with correct values', async () => {
-        const { sut, getUserSpy } = makeSut()
+        const { sut, loadAccountByIdSpy } = makeSut()
         const request = mockRequest()
         await sut.handle(request)
-        expect(getUserSpy.input).toEqual(request)
+        expect(loadAccountByIdSpy.input).toEqual(request)
     })
     test('Should return 400 if GetUser fail', async () => {
-        const { sut, getUserSpy } = makeSut()
-        getUserSpy.result = null
+        const { sut, loadAccountByIdSpy } = makeSut()
+        loadAccountByIdSpy.result = null
         const request = mockRequest()
         const httpResponse = await sut.handle(request)
         expect(httpResponse.statusCode).toBe(400)

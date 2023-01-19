@@ -1,10 +1,10 @@
-import { DbGetUser } from '@/data/usecases'
-import { GetUser } from '@/domain/usecases'
+import { DbLoadAccountById } from '@/data/usecases'
+import { LoadAccountById } from '@/domain/usecases'
 import { LoadAccountByIdRepositorySpy } from '@/tests/data/mocks'
 
 type SutTypes = {
     loadAccountByIdRepositorySpy: LoadAccountByIdRepositorySpy
-    sut: DbGetUser
+    sut: DbLoadAccountById
 }
 
 const throwError = (): never => {
@@ -13,15 +13,15 @@ const throwError = (): never => {
 
 const makeSut = (): SutTypes => {
     const loadAccountByIdRepositorySpy = new LoadAccountByIdRepositorySpy()
-    const sut = new DbGetUser(loadAccountByIdRepositorySpy)
+    const sut = new DbLoadAccountById(loadAccountByIdRepositorySpy)
     return { sut, loadAccountByIdRepositorySpy }
 }
 
-const mockRequest = (): GetUser.Request => ({
+const mockRequest = (): LoadAccountById.Request => ({
     identification: 'identification'
 })
 
-describe('DbGetUser', () => {
+describe('DbLoadAccountById', () => {
     test('Should call LoadAccountByIdRepositorySpy with correct values', async () => {
         const { sut, loadAccountByIdRepositorySpy } = makeSut()
         const request = mockRequest()
