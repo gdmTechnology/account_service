@@ -52,8 +52,7 @@ export class AccountMongoRepository implements
     }
 
     async loadAccountById(identification: string): Promise<LoadAccountByIdRepository.Result | null> {
-        const result = await AccountModel.findOne({ identification }).lean()
-        return result
+        return await AccountModel.findOne({ identification }).lean()
     }
 
     async list(): Promise<ListUsersRepository.Result> {
