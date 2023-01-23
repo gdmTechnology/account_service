@@ -20,6 +20,7 @@ const AccountSchema = new Schema({
         type: String,
         required: true
     },
+    tenant: String,
     lastName: String,
     birthDate: Date,
     tellphone: String,
