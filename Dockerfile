@@ -4,7 +4,7 @@ ENV NODE_ENV=dev
 RUN mkdir /app
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm install --production
+RUN npm install
 COPY . .
 
 COPY entrypoint.sh /entrypoint.sh
