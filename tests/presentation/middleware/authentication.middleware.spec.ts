@@ -31,17 +31,17 @@ describe('Authentication Middleware', () => {
         expect(loadAccountByTokenSpy.params.role).toBe('any_role')
     })
 
-    test('Should return 403 if no x-access-token exists in headers', async () => {
+    test('Should return 401 if no x-access-token exists in headers', async () => {
         const { sut } = makeSut()
         const httpResponse = await sut.handle({})
-        expect(httpResponse.statusCode).toBe(403)
+        expect(httpResponse.statusCode).toBe(401)
     })
 
-    test('Should return 403 if LoadAccountByTokenRepository return null', async () => {
+    test('Should return 401 if LoadAccountByTokenRepository return null', async () => {
         const { sut, loadAccountByTokenSpy } = makeSut()
         loadAccountByTokenSpy.result = null
         const httpResponse = await sut.handle(mockRequest())
-        expect(httpResponse.statusCode).toBe(403)
+        expect(httpResponse.statusCode).toBe(401)
     })
 
     test('Should return 200 if LoadAccountByTokenRepository return valid account', async () => {
