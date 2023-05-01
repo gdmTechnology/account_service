@@ -6,6 +6,7 @@ import { AccountMongoRepository, TenantMongoRepository } from '@/infra/db/mongod
 
 let app: Express
 const validJwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImlkZW50aWZpY2F0aW9uIiwiaWF0IjoxNjgyMjk3OTYyfQ.oMqQCJOwsWr2gkf46O_X5wSLIvvivGoZkA9nyenkSjw'
+const validAdminJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY0MGIxMWYxLTE3ZDEtNGUyYi1hNDM0LWM3N2I4MGM1NTRlYyIsImlhdCI6MTY4MjE3MDA5NH0.UQ9U1AMt1cqeE1IyNzPYv0IAsEHLUUyV-XzIt4yrAqE'
 const hashedPassword = '$2b$12$cVkcsM1DhD6TSK5NSG5HWetKmyQzvpwexhFfRnUMoRSX9rVGg4Nva'
 
 const addAccountParams = (): any => ({
@@ -26,6 +27,14 @@ const addAccountParams = (): any => ({
     stateAddress: 'stateAddress',
     accessToken: validJwtToken,
     role: null
+})
+
+const addAdminAccountParams = (): any => ({
+    ...addAccountParams(),
+    role: 'admin',
+    accessToken: validAdminJwt,
+    identification: 'f40b11f1-17d1-4e2b-a434-c77b80c554ec',
+    email: 'gui.acassemiro@gmail.com'
 })
 
 const addTenantParams = (): any => ({
@@ -58,6 +67,11 @@ const createTenant = async (): Promise<any> => {
 
 const createAccount = async (): Promise<any> => {
     const account = await makeSutAccount().save(addAccountParams())
+    return account
+}
+
+const createAdminAccount = async (value): Promise<any> => {
+    const account = await makeSutAccount().save(value)
     return account
 }
 
@@ -176,6 +190,145 @@ describe('Account Routes', () => {
                 .send({
                     password: 'newPassword'
                 })
+                .expect(401)
+        })
+
+        test('Should return 400 if user not found', async () => {
+            await createAccount()
+            await request(app)
+                .put('/api/account/invalidIdentification')
+                .set({ 'x-access-token': validJwtToken })
+                .send({
+                    password: 'newPassword'
+                })
+                .expect(400)
+        })
+
+        test('Should return 400 if user not found', async () => {
+            await createAccount()
+            await request(app)
+                .put('/api/account/invalidIdentification')
+                .set({ 'x-access-token': validJwtToken })
+                .send({
+                    password: 'newPassword'
+                })
+                .expect(400)
+        })
+    })
+
+    describe('GET /account', () => {
+        test('Should return 200 if succeds', async () => {
+            await createAdminAccount(addAdminAccountParams())
+            await request(app)
+                .get('/api/account')
+                .set({ 'x-access-token': validAdminJwt })
+                .expect(200)
+        })
+
+        test('Should return 401 if invalid jwt token', async () => {
+            await createAdminAccount(addAdminAccountParams())
+            await request(app)
+                .get('/api/account')
+                .set({ 'x-access-token': '' })
+                .expect(401)
+        })
+    })
+
+    describe('GET /account/:identification', () => {
+        test('Should return 200 if succeds', async () => {
+            await createAdminAccount(addAdminAccountParams())
+            await request(app)
+                .get(`/api/account/${addAdminAccountParams().identification}`)
+                .set({ 'x-access-token': validAdminJwt })
+                .expect(200)
+        })
+
+        test('Should return 400 if invalid identification', async () => {
+            await createAdminAccount(addAdminAccountParams())
+            await request(app)
+                .get('/api/account/invalidIdentification')
+                .set({ 'x-access-token': validAdminJwt })
+                .expect(400)
+        })
+
+        test('Should return 401 if invalid jwt token', async () => {
+            await createAdminAccount(addAdminAccountParams())
+            await request(app)
+                .get('/api/account/identification')
+                .set({ 'x-access-token': '' })
+                .expect(401)
+        })
+    })
+
+    describe('DELETE /account/:identification', () => {
+        test('Should return 200 if succeds', async () => {
+            await createAdminAccount(addAdminAccountParams())
+            await createAccount()
+            await request(app)
+                .delete('/api/account/identification')
+                .set({ 'x-access-token': validAdminJwt })
+                .expect(200)
+        })
+
+        test('Should return 400 if invalid identification', async () => {
+            await createAdminAccount(addAdminAccountParams())
+            await request(app)
+                .get('/api/account/invalidIdentification')
+                .set({ 'x-access-token': validAdminJwt })
+                .expect(400)
+        })
+
+        test('Should return 401 if invalid jwt token', async () => {
+            await request(app)
+                .delete('/api/account/identification')
+                .set({ 'x-access-token': '' })
+                .expect(401)
+        })
+    })
+
+    describe('POST /account/admin', () => {
+        test('Should return 200 if succeds', async () => {
+            await createAdminAccount(addAdminAccountParams())
+            const newAdmin = {
+                ...addAdminAccountParams(),
+                email: 'anyAdmin@gmail.com',
+                identification: 'newIdentification',
+                accessToken: 'accessToken'
+            }
+
+            await request(app)
+                .post('/api/account/admin')
+                .set({ 'x-access-token': validAdminJwt })
+                .send(newAdmin)
+                .expect(200)
+        })
+        test('Should return 400 if duplicate', async () => {
+            await createAdminAccount(addAdminAccountParams())
+            const newAdmin = {
+                ...addAdminAccountParams(),
+                email: 'anyAdmin@gmail.com',
+                identification: 'newIdentification',
+                accessToken: 'accessToken'
+            }
+            await createAdminAccount(newAdmin)
+            await request(app)
+                .post('/api/account/admin')
+                .set({ 'x-access-token': validAdminJwt })
+                .send(newAdmin)
+                .expect(400)
+        })
+        test('Should return 401 if invalid jwt', async () => {
+            await createAdminAccount(addAdminAccountParams())
+            const newAdmin = {
+                ...addAdminAccountParams(),
+                email: 'anyAdmin@gmail.com',
+                identification: 'newIdentification',
+                accessToken: 'accessToken'
+            }
+            await request(app)
+                .post('/api/account/admin')
+                .set({ 'x-access-token': '' })
+                .send(newAdmin)
                 .expect(401)
         })
     })
