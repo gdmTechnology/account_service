@@ -20,12 +20,11 @@ export class CreateAdminController implements Controller {
                 return badRequest(error)
             }
             const { passwordConfirmation, ...newAccount } = data
-
             const isValid = await this.addAccount.handle({ ...newAccount, role: 'admin' }, data.accountId)
             if (isValid === Constants.EmailInUseError) {
-                return forbidden(new EmailInUseError())
+                return badRequest(new EmailInUseError())
             } else if (isValid === Constants.NotFoundTenantError) {
-                return forbidden(new NotFoundTenantError())
+                return badRequest(new NotFoundTenantError())
             } else if (isValid === Constants.Forbidden) {
                 return forbidden(new AccessDeniedError())
             }
