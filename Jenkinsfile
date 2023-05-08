@@ -29,7 +29,7 @@ pipeline {
 		}
 		stage("build") {
 			steps {
-				sh 'docker build -t user-history-service .'
+				sh 'docker build -t account-service .'
 			}
 		}
 		stage("run") {
