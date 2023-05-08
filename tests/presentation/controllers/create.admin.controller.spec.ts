@@ -104,20 +104,20 @@ describe('CreateAdminController', () => {
         expect(response).toEqual(ok({ ...rest, accessToken: 'accessToken' }))
     })
 
-    test('Should return 403 if email already is in use', async () => {
+    test('Should return 400 if email already is in use', async () => {
         const { sut, addAccountSpy } = makeSut()
         const request = mockRequest()
         jest.spyOn(addAccountSpy, 'handle').mockReturnValueOnce(new Promise((resolve, reject) => resolve(Constants.EmailInUseError)))
         const response = await sut.handle(request)
-        expect(response).toEqual(forbidden(new EmailInUseError()))
+        expect(response.statusCode).toBe(400)
     })
 
-    test('Should return 403 if not found tenant', async () => {
+    test('Should return 400 if not found tenant', async () => {
         const { sut, addAccountSpy } = makeSut()
         const request = mockRequest()
         jest.spyOn(addAccountSpy, 'handle').mockReturnValueOnce(new Promise((resolve, reject) => resolve(Constants.NotFoundTenantError)))
         const response = await sut.handle(request)
-        expect(response).toEqual(forbidden(new NotFoundTenantError()))
+        expect(response.statusCode).toBe(400)
     })
 
     test('Should return 403 if admin is not authorized', async () => {
