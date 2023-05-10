@@ -1,8 +1,10 @@
 import { CreateAdminController } from '@/presentation/controllers'
 import { ValidationSpy, AddAccountSpy, AuthSpy } from '../mocks'
 import { serverError, ok, forbidden } from '@/presentation/helpers/http.helper'
-import { AccessDeniedError, EmailInUseError, NotFoundTenantError } from '@/presentation/errors'
+import { AccessDeniedError } from '@/presentation/errors'
 import { Constants } from '@/helper'
+
+const birthDate = new Date('2017-02-02T12:54:59.218Z')
 
 const mockRequest = (): CreateAdminController.Request => ({
     email: 'email',
@@ -12,7 +14,7 @@ const mockRequest = (): CreateAdminController.Request => ({
     identification: 'identification',
     name: 'name',
     lastName: 'lastName',
-    birthDate: new Date(),
+    birthDate,
     tellphone: 'tellphone',
     cellphone: 'cellphone',
     streetAddress: 'streetAddress',

@@ -1,5 +1,7 @@
 import { Authentication } from '@/domain/usecases'
 
+const birthDate = new Date('2017-02-02T12:54:59.218Z')
+
 export class AuthSpy implements Authentication {
     input: Authentication.Request
     result = {
@@ -8,7 +10,7 @@ export class AuthSpy implements Authentication {
         tenant: 'tenant',
         identification: 'identification',
         lastName: 'lastName',
-        birthDate: new Date(),
+        birthDate,
         tellphone: 'tellphone',
         cellphone: 'cellphone',
         streetAddress: 'streetAddress',
