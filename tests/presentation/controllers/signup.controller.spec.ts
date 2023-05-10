@@ -4,6 +4,8 @@ import { serverError, ok, forbidden } from '@/presentation/helpers/http.helper'
 import { EmailInUseError, NotFoundTenantError } from '@/presentation/errors'
 import { Constants } from '@/helper'
 
+const birthDate = new Date('2017-02-02T12:54:59.218Z')
+
 const mockRequest = (): SignUpController.Request => ({
     email: 'email',
     tenant: 'tenant',
@@ -12,7 +14,7 @@ const mockRequest = (): SignUpController.Request => ({
     identification: 'identification',
     name: 'name',
     lastName: 'lastName',
-    birthDate: new Date(),
+    birthDate,
     tellphone: 'tellphone',
     cellphone: 'cellphone',
     streetAddress: 'streetAddress',
@@ -47,6 +49,13 @@ const makeSut = (): SutTypes => {
 }
 
 describe('SignUpController', () => {
+    test('Should return 200 if AddAccount and Authentication pass', async () => {
+        const { sut } = makeSut()
+        const request = mockRequest()
+        const { password, passwordConfirmation, ...rest } = request
+        const response = await sut.handle(request)
+        expect(response).toEqual(ok({ ...rest, accessToken: 'accessToken' }))
+    })
     test('Should call validation with correct values', async () => {
         const { sut, validationSpy } = makeSut()
         const request = mockRequest()
@@ -93,14 +102,6 @@ describe('SignUpController', () => {
         const request = mockRequest()
         const response = await sut.handle(request)
         expect(response).toEqual(serverError(new Error()))
-    })
-
-    test('Should return 200 if AddAccount and Authentication pass', async () => {
-        const { sut } = makeSut()
-        const request = mockRequest()
-        const { password, passwordConfirmation, ...rest } = request
-        const response = await sut.handle(request)
-        expect(response).toEqual(ok({ ...rest, accessToken: 'accessToken' }))
     })
 
     test('Should return 403 if email already is in use', async () => {
