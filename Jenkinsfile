@@ -9,10 +9,16 @@ pipeline {
 				'''
 			}
 		}
-		stage('Tests') {
+		stage("install node_modules") {
 			steps {
 				script {
 				sh 'npm i'
+				}
+			}
+		}
+		stage('Tests') {
+			steps {
+				script {
 				sh 'npm run test'
 				}
 			}
