@@ -10,13 +10,6 @@
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js"
   },
-  "jest": {
-    "coverageReporters": [
-      "text",
-      "cobertura",
-      "html"
-    ]
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
