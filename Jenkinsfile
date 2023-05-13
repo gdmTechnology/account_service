@@ -40,7 +40,7 @@ pipeline {
 		}
 		stage("run") {
 			steps {
-				sh '''
+				sh '
                     docker run -d \
                     -e HOST=account_service \
                     -e JWT_SECRET=1kZDnw8==jh \
@@ -56,10 +56,10 @@ pipeline {
 					-e MONGO_USER=rem \
 					-p 3001:3001 \
 					--hostname account_service \
-                    --network middleware-network \
+                    --network rem-network \
 					--restart always \
-					--name account_service account_service
-				'''
+					--name account_service account-service
+				'
 			}
 		}
 	}
