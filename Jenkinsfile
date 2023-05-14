@@ -28,9 +28,9 @@ pipeline {
 				}
 			}
 		}
-		stage("killing old container") {
+		stage("Removing old images") {
 			steps {
-				sh 'docker system prune --all'
+				sh 'docker rmi account-service'
 			}
 		}
 		stage("build") {
