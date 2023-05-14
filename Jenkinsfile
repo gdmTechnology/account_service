@@ -40,7 +40,7 @@ pipeline {
 		}
 		stage("run") {
 			steps {
-				sh '
+				sh '''
                     docker run -d \
                     -e HOST=account_service \
                     -e JWT_SECRET=1kZDnw8==jh \
@@ -59,7 +59,7 @@ pipeline {
                     --network rem-network \
 					--restart always \
 					--name account_service account-service
-				'
+				'''
 			}
 		}
 	}
