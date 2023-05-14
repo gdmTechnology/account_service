@@ -30,7 +30,13 @@ pipeline {
 		}
 		stage("Removing old images") {
 			steps {
-				sh 'docker rmi account-service'
+				script {
+					def imageExists = sh(script: "docker images -q account-service", returnStdout: true) == 0
+
+					if(imageExists){
+						sh 'docker rmi account-service'
+					}
+				}
 			}
 		}
 		stage("build") {
