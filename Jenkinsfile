@@ -56,7 +56,7 @@ pipeline {
 					-e MONGO_USER=rem \
 					-p 3001:3001 \
 					--hostname account_service \
-                    --network middleware-network \
+                    --network rem_network \
 					--restart always \
 					--name account_service account-service
 				'''
