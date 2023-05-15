@@ -44,6 +44,12 @@ pipeline {
 				sh 'docker build -t account-service .'
 			}
 		}
+
+		stage("Killing unused containers") {
+			steps {
+				sh 'sudo docker system prune --all'
+			}
+		}
 		stage("run") {
 			steps {
 				sh '''
