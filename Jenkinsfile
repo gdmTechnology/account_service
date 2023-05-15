@@ -47,7 +47,7 @@ pipeline {
 
 		stage("Killing unused containers") {
 			steps {
-				sh 'sudo docker system prune --all'
+				sh 'docker system prune --all'
 			}
 		}
 		stage("run") {
