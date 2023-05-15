@@ -28,11 +28,6 @@ pipeline {
 				}
 			}
 		}
-		stage("Removing old images") {
-			steps {
-				sh 'docker rmi account-service'
-			}
-		}
 		stage("build") {
 			steps {
 				sh 'docker build -t account-service .'
