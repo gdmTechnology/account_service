@@ -33,8 +33,8 @@ pipeline {
 				script {
 					def imageExists = sh(script: "docker images -q account-service", returnStdout: true) == 0
 
+					sh 'docker rmi account-service'
 					if(imageExists){
-						sh 'docker rmi account-service'
 					}
 				}
 			}
