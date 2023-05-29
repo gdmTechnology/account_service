@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "lint": "npx eslint --fix .",
+    "build": "rimraf ./dist && tsc",
+    "start": "node dist/src/main/server.js",
     "start:dev": "npx nodemon src/main/server.ts",
-    "build": "rimraf ./build && tsc",
-    "start": "npm run build && node build/index.js",
-    "test": "jest --passWithNoTests --detectOpenHandles --forceExit --runInBand --no-cache --coverage --coverageDirectory=output/coverage/jest",
+    "test": "jest --detectOpenHandles --passWithNoTests --runInBand --no-cache",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
-    "test:integration": "npm test -- --watch -c jest-integration-config.js"
+    "test:integration": "npm test -- --watch -c jest-integration-config.js",
+    "test:ci": "npm test -- --forceExit --coverage --coverageDirectory=output/coverage/jest",
+    "test:staged": "npm test -- --forceExit"
   },
   "keywords": [],
   "author": "",
@@ -29,7 +32,9 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.5.1",
     "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.3",
     "jest": "^29.3.1",
+    "lint-staged": "^13.2.2",
     "mongodb-memory-server": "^8.10.2",
     "rimraf": "^3.0.2",
     "supertest": "^6.3.3",
@@ -50,6 +55,6 @@
     "validator": "^13.7.0"
   },
   "_moduleAliases": {
-    "@": "src"
+    "@": "dist/src"
   }
 }
