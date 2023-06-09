@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "lint": "npx eslint --fix .",
-    "build": "rimraf ./dist && tsc",
-    "start": "node dist/src/main/server.js",
+    "build": "rimraf ./dist && tsc -p tsconfig-build.json",
+    "start": "node dist/main/server.js",
     "start:dev": "npx nodemon src/main/server.ts",
     "test": "jest --detectOpenHandles --passWithNoTests --runInBand --no-cache",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
@@ -55,6 +55,6 @@
     "validator": "^13.7.0"
   },
   "_moduleAliases": {
-    "@": "dist/src"
+    "@": "dist"
   }
 }
